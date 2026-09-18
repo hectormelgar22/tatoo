@@ -284,8 +284,13 @@
     if (b) abrir(Number(b.dataset.abrir));
   });
 
-  btnPrev.addEventListener("click", function () { mover(-1); });
-  btnNext.addEventListener("click", function () { mover(1); });
+  /* Los botones cubren media escena cada uno, asi que un deslizamiento acaba
+     soltando el dedo encima de uno y el navegador dispara tambien su `click`:
+     la plancha avanzaria dos veces. Esta bandera la levanta el gesto.       */
+  var huboArrastre = false;
+
+  btnPrev.addEventListener("click", function () { if (!huboArrastre) mover(-1); });
+  btnNext.addEventListener("click", function () { if (!huboArrastre) mover(1); });
 
   dlg.addEventListener("keydown", function (ev) {
     if (ev.key === "ArrowLeft") { ev.preventDefault(); mover(-1); }
@@ -326,16 +331,25 @@
     escena.addEventListener("pointerdown", function (e) {
       if (e.pointerType === "mouse" && e.button !== 0) return;
       activo = true; id = e.pointerId;
+      huboArrastre = false;
       x0 = e.clientX; t0 = performance.now(); dx = 0;
       ancho = escena.clientWidth || 1;
       hist = [{ x: e.clientX, t: t0 }];
-      escena.setPointerCapture(id);
       lamina.style.transition = "none";
+      /* La captura NO se pide aqui. Mientras hay captura, el navegador manda
+         el `click` al elemento que captura en vez de al que se pulso, y los
+         botones de pasar plancha —que ocupan media escena— no lo recibirian
+         nunca. Se pide en cuanto el dedo se mueve de verdad.                */
     });
 
     escena.addEventListener("pointermove", function (e) {
       if (!activo || e.pointerId !== id) return;
       dx = e.clientX - x0;
+      /* A partir de unos pocos pixeles esto ya es un arrastre, no un toque. */
+      if (Math.abs(dx) > 8 && !huboArrastre) {
+        huboArrastre = true;
+        try { escena.setPointerCapture(id); } catch (err) { /* el puntero ya se fue */ }
+      }
       /* En el primero y en el ultimo no hay a donde ir: se frena, no se choca. */
       var tope = (dx > 0 && idx === 0) || (dx < 0 && idx === orden.length - 1);
       var d = tope ? gomaElastica(dx, ancho) : dx;
@@ -347,7 +361,9 @@
     function soltar(e) {
       if (!activo || e.pointerId !== id) return;
       activo = false;
-      try { escena.releasePointerCapture(id); } catch (err) { /* ya liberado */ }
+      if (huboArrastre) {
+        try { escena.releasePointerCapture(id); } catch (err) { /* ya liberado */ }
+      }
 
       var ult = hist[hist.length - 1], pri = hist[0];
       var dt = Math.max(1, ult.t - pri.t);

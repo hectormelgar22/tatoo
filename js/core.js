@@ -303,6 +303,8 @@
        transform: eso no toca el layout de nadie.                            */
     var revelar = function () {
       caja.setAttribute("data-visible", "");
+      /* Lo saben el resto de piezas fijas de la pantalla, que se apartan. */
+      document.documentElement.setAttribute("data-edad", "");
       if (cfg.bloqueante) {
         document.documentElement.setAttribute("data-bloqueado", "");
         $("[data-si]", caja).focus();
@@ -313,6 +315,7 @@
 
     function cerrar() {
       caja.removeAttribute("data-visible");
+      document.documentElement.removeAttribute("data-edad");
       document.documentElement.removeAttribute("data-bloqueado");
       var fin = function () { caja.remove(); };
       if (quieto()) fin();
@@ -329,7 +332,7 @@
       var cuerpo = $(".edad__caja", caja);
       cuerpo.innerHTML =
         '<p class="plate-no">Aviso</p>' +
-        '<h2 class="d4">Todavia no</h2>' +
+        '<h2 class="d4">' + esc(cfg.tituloMenor) + "</h2>" +
         '<p class="sm fg-2 edad__texto">' + esc(cfg.textoMenor) + "</p>" +
         '<div class="edad__botones">' +
           '<a class="btn btn--stamp" href="https://wa.me/' + esc(S.studio.whatsapp) +
@@ -392,6 +395,44 @@
       });
   }
 
+  /* --- boton flotante de WhatsApp ------------------------------------------ */
+  /* El canal por el que escribe de verdad la gente. El dibujo es de la casa:
+     un bocadillo de esquina recta, como todo aqui, con el auricular dentro.
+     Lo que lo hace reconocible es la palabra que lleva al lado.              */
+
+  function montarWhatsapp() {
+    var cfg = S.studio.botonWhatsapp;
+    if (!cfg || !cfg.activo || !S.studio.whatsapp) return;
+    /* Esto va antes de la salida de abajo: en una pagina ya volcada el boton
+       existe pero la marca haria falta igual, y el pie la necesita para
+       apartar sus enlaces legales.                                          */
+    document.documentElement.setAttribute("data-wasap-activo", "");
+    /* Si ya viene volcado en el HTML por tools/sync-contenido.py, no se
+       duplica.                                                              */
+    if ($("[data-wasap]")) return;
+
+    var a = document.createElement("a");
+    a.className = "wasap";
+    a.setAttribute("data-wasap", "");
+    a.href = "https://wa.me/" + S.studio.whatsapp +
+      (cfg.mensaje ? "?text=" + encodeURIComponent(cfg.mensaje) : "");
+    a.target = "_blank";
+    a.rel = "noopener";
+    /* El nombre accesible empieza por el texto visible: quien navega por voz
+       dice "WhatsApp" y el navegador encuentra este enlace.                 */
+    a.setAttribute("aria-label", cfg.etiqueta + ": " + cfg.titulo +
+      " (se abre en una pestaña nueva)");
+    a.innerHTML =
+      '<svg class="wasap__marca" viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
+        '<path d="M3 21V4h18v13H7.5L3 21Z" stroke="currentColor" stroke-width="1.6" ' +
+          'stroke-linejoin="round"/>' +
+        '<path d="M9 8.2c0 3.1 2.7 5.8 5.8 5.8l1-1.6-2-1.1-.9.9a5.6 5.6 0 0 1-2.1-2.1l.9-.9' +
+          '-1.1-2L9 8.2Z" fill="currentColor"/>' +
+      "</svg>" +
+      '<span class="wasap__texto">' + esc(cfg.etiqueta) + "</span>";
+    document.body.appendChild(a);
+  }
+
   /* --- arranque ------------------------------------------------------------ */
 
   montarNav();
@@ -399,6 +440,7 @@
   montarSchema();
   montarRevelado();
 
+  montarWhatsapp();
   montarEdad();
 
   /* Se expone lo minimo para las paginas que lo necesitan. */

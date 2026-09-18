@@ -121,6 +121,12 @@ INCOMPLETO = [
 LIMPIEZAS = [
     # La franja de edad depende de localStorage de cada visitante.
     (r'<aside class="edad[^"]*"[\s\S]*?</aside>\s*', "", "franja de edad"),
+    # ...y las marcas que deja en <html>. Sin quitarlas se congela el estado
+    # "estoy preguntando la edad" en el codigo fuente, y a quien ya contesto
+    # otro dia le quedan escondidas las piezas que se apartan de la franja.
+    (r'(<html[^>]*?) data-edad=""', r"\1", "marca de la franja de edad"),
+    (r'(<html[^>]*?) data-bloqueado=""', r"\1", "bloqueo del scroll"),
+    (r'(<html[^>]*?) data-menu=""', r"\1", "menu desplegado"),
 
     # El centinela del borde de scroll lo crea el script; volcarlo no aporta.
     (r'<div aria-hidden="true" class="nav__centinela"></div>\s*', "", "centinela de scroll"),
@@ -137,6 +143,13 @@ LIMPIEZAS = [
 
     # `inert` lo pone el filtrado de la galería.
     (r' inert=""', "", "atributo inert"),
+
+    # El espacio antes de </body>. El analizador de HTML devuelve al final del
+    # cuerpo cualquier texto que venga después de </html>, así que el salto de
+    # línea con el que se guarda el archivo reaparece dentro del cuerpo en el
+    # volcado siguiente. Sin normalizarlo, el primer volcado tras añadir algo
+    # al final del cuerpo sale distinto del segundo.
+    (r"\s*</body>", "</body>", "espacio final del cuerpo"),
 ]
 
 
@@ -204,6 +217,17 @@ def volcar(nombre, comprobar=False):
     if f"127.0.0.1:{PUERTO}" in salida:
         print(f"  {nombre}.html: el volcado lleva la dirección del servidor local.")
         print("      Algún script usa location.origin. Debe salir de content.js. No se toca.")
+        return False
+
+    # La cabecera tiene que seguir siendo una cabecera. Si el HTML de partida
+    # tiene la etiqueta <html> rota, el analizador cierra <head> antes de
+    # tiempo y mete el título, la descripción y las hojas de estilo dentro del
+    # cuerpo. La página se sigue viendo, así que a simple vista no se nota:
+    # lo que se pierde es todo lo que leen Google y los previsualizadores.
+    cabeza = salida.split("</head>")[0] if "</head>" in salida else ""
+    if "<title" not in cabeza or 'name="description"' not in cabeza:
+        print(f"  {nombre}.html: la cabecera ha salido vacía o incompleta. No se toca.")
+        print("      Revisa que la etiqueta <html> del archivo esté bien formada.")
         return False
 
     # Comprobación de que el JavaScript llegó a ejecutarse: si la barra sigue

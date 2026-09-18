@@ -143,11 +143,46 @@
     if (p.id === "zona") cuerpo = pintarZona();
 
     if (p.id === "estilo") {
-      cuerpo = '<div class="ops ops--2">' + S.estilos.map(function (o) {
+      /* Un nombre de estilo no dice nada a quien no esta metido en esto.
+         Cada opcion ensena una plancha de verdad de ese estilo y lleva al
+         registro ya filtrado, que es donde estan todas.                     */
+      cuerpo = '<div class="ops ops--2 ops--muestras">' + S.estilos.map(function (o) {
         var quien = S.artistas.filter(function (a) { return a.estiloId === o.id; });
-        return opcion("estilo", o.id, o.nombre,
-          quien.length ? quien.map(function (a) { return a.nombre; }).join(", ") : "Varios",
-          est.estilo === o.id);
+        var suyas = S.planchas.filter(function (pl) { return pl.estilo === o.id; });
+        var ej = suyas[0];
+
+        var lamina = ej
+          ? N.imgHTML({
+              base: ej.img, tipo: "plancha", ratio: ej.ratio,
+              alt: "Ejemplo de " + o.nombre.toLowerCase() + ": " + ej.titulo.toLowerCase() + ".",
+              sizes: "(min-width: 34rem) 7rem, 26vw"
+            })
+          : '<span class="muestra__sin" aria-hidden="true"></span>';
+
+        var caja =
+          '<span class="op__caja op__caja--muestra">' +
+            '<span class="muestra__lamina">' + lamina + "</span>" +
+            '<span class="muestra__texto">' +
+              '<span class="op__t">' + esc(o.nombre) + "</span>" +
+              '<span class="op__d">' +
+                esc(quien.length ? quien.map(function (a) { return a.nombre; }).join(", ") : "Varios") +
+              "</span>" +
+            "</span>" +
+          "</span>";
+
+        var pie = suyas.length
+          ? '<a class="muestra__ver" href="galeria.html?estilo=' + esc(o.id) + '">' +
+              "Ver " + suyas.length + (suyas.length === 1 ? " plancha" : " planchas") +
+              " en el registro</a>"
+          : '<span class="muestra__ver muestra__ver--vacio">Todavía sin obra en el registro</span>';
+
+        return '<div class="muestra">' +
+          '<label class="op">' +
+            '<input type="radio" name="estilo" value="' + esc(o.id) + '"' +
+              (est.estilo === o.id ? " checked" : "") + ">" +
+            caja +
+          "</label>" + pie +
+        "</div>";
       }).join("") + "</div>";
     }
 

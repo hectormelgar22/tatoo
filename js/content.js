@@ -51,6 +51,16 @@ window.STUDIO = {
     telefono: "+34 910 00 00 00",          // ficticio: cambiar por el real
     telefonoLimpio: "34910000000",
     whatsapp: "34600000000",               // ficticio: solo dígitos, con prefijo
+
+    /* Botón flotante de WhatsApp, el de la esquina. Pon `activo: false` y
+       desaparece de toda la web. El mensaje es el que sale ya escrito al
+       abrir el chat: cuanto más concreto, menos "hola" sueltos que contestar. */
+    botonWhatsapp: {
+      activo: true,
+      etiqueta: "WhatsApp",
+      titulo: "Escríbenos por WhatsApp",
+      mensaje: "Hola, os escribo desde la web. Tengo una duda sobre un tatuaje."
+    },
     email: "estudio@nigredo.example",      // ficticio
     instagram: "nigredo.tattoo",
 
@@ -81,6 +91,7 @@ window.STUDIO = {
              "18, escríbenos y te explicamos cómo se hace.",
       confirmar: "Tengo 18 o más",
       rechazar: "Tengo menos de 18",
+      tituloMenor: "Todavía no",
       textoMenor: "Sin problema. Escríbenos por WhatsApp y te contamos qué " +
                   "papeles hacen falta y cómo venir acompañado. No vas a " +
                   "perder el sitio por preguntar.",

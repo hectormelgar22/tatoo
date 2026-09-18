@@ -54,6 +54,7 @@ numeradas. Las más habituales:
 | Quiero cambiar… | Sección |
 |---|---|
 | Nombre, dirección, teléfono, WhatsApp, horarios | `studio` |
+| El botón flotante de WhatsApp y su mensaje | `studio.botonWhatsapp` |
 | Titulares y entradillas de cada página | `textos` |
 | Artistas: bio, tarifa por hora, mínimo, agenda | `artistas` |
 | Precios del estimador | `estimador` |
@@ -69,6 +70,14 @@ Dos reglas al editar:
 - **Los `slug` y los `id` son direcciones internas.** Cambiar `vera-mota` por
   otra cosa rompe los enlaces ya publicados. Cambiar el texto visible no rompe
   nada.
+
+### El botón flotante de WhatsApp
+
+Sale en la esquina inferior derecha de todas las páginas. Se apaga entero
+poniendo `activo: false` en `studio.botonWhatsapp`. El `mensaje` es el texto
+con el que se abre el chat ya escrito: cuanto más concreto, menos «hola»
+sueltos que contestar. Mientras se pregunta la edad no aparece, porque esa
+respuesta va primero y además ocupa el mismo sitio.
 
 ### El WhatsApp
 

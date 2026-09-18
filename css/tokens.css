@@ -43,6 +43,7 @@
      3.38:1 sobre tinta  -> pasa 1.4.11 (UI) y texto grande. NUNCA texto chico.
      5.13:1 bajo papel   -> cuando debe llevar texto, se vuelve bloque lleno.  */
   --lacre:         #C41E30;
+  --lacre-lit:     #D42234;   /* al pasar por encima                          */
   --lacre-deep:    #8E1522;   /* presionado / borde inferior del bloque       */
   --lacre-wash:    rgba(196, 30, 48, 0.14);  /* velo de seleccion             */
 
@@ -123,7 +124,7 @@
 
   /* --- CAPAS --------------------------------------------------------------- */
   --z-grain: 1;  --z-sticky: 20;  --z-nav: 40;
-  --z-panel: 60; --z-lightbox: 80; --z-gate: 90;
+  --z-panel: 60; --z-wasap: 70; --z-lightbox: 80; --z-gate: 90;
 }
 
 /* El grano es caro si se hace mal: nada de feTurbulence a pantalla completa.

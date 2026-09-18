@@ -160,38 +160,60 @@
   object-fit: contain;
 }
 
+/* Cada boton ocupa media escena, no una pastilla en el borde de la pantalla.
+   Lo que la gente hace delante de una foto ampliada es pulsar sobre la foto,
+   no buscar una flecha a 1.300 px de ella. Asi el gesto natural funciona y
+   siguen existiendo solo dos controles con nombre para el teclado y el lector
+   de pantalla, en vez de duplicarlos con zonas invisibles aparte.            */
 .visor__nav {
   position: absolute;
-  top: 50%;
-  translate: 0 -50%;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  display: grid;
+  align-items: center;
+  padding: 0 var(--s4);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+.visor__nav[data-prev] { left: 0;  justify-items: start; }
+.visor__nav[data-next] { right: 0; justify-items: end; }
+.visor__nav:disabled { cursor: default; }
+
+/* La pastilla es lo unico que se ve: el area que se pulsa es mucho mayor. */
+.visor__nav i {
   width: var(--touch);
   height: calc(var(--touch) * 1.6);
   display: grid;
   place-items: center;
-  background: color-mix(in srgb, var(--ink) 62%, transparent);
+  background: color-mix(in srgb, var(--ink) 72%, transparent);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: var(--hair) solid var(--rule-lit);
-  cursor: pointer;
-  z-index: 1;
+  border: var(--hair) solid var(--fg-mute);
   transition: border-color var(--t-fast) ease, background-color var(--t-fast) ease,
-              transform var(--t-press) var(--ease-out);
+              opacity var(--t-fast) ease, transform var(--t-press) var(--ease-out);
 }
-.visor__nav:active { transform: translateY(-50%) scale(0.95); }
-.visor__nav[data-prev] { left: 0; }
-.visor__nav[data-next] { right: 0; }
-.visor__nav:disabled { opacity: .3; cursor: default; }
+.visor__nav:disabled i { opacity: .22; }
+.visor__nav:active:not(:disabled) i { transform: scale(0.94); }
 @media (hover: hover) and (pointer: fine) {
-  .visor__nav:not(:disabled):hover { border-color: var(--lacre); background: color-mix(in srgb, var(--ink) 80%, transparent); }
+  .visor__nav:not(:disabled):hover i {
+    border-color: var(--lacre);
+    background: color-mix(in srgb, var(--ink) 88%, transparent);
+  }
 }
 /* Punta dibujada con dos trazos, no un glifo unicode haciendo de icono. */
-.visor__nav i {
+.visor__nav i::before {
+  content: "";
   width: 11px; height: 11px;
   border-left: 2px solid currentColor;
   border-bottom: 2px solid currentColor;
 }
-.visor__nav[data-prev] i { rotate: 45deg; translate: 2px 0; }
-.visor__nav[data-next] i { rotate: -135deg; translate: -2px 0; }
+.visor__nav[data-prev] i::before { rotate: 45deg; translate: 2px 0; }
+.visor__nav[data-next] i::before { rotate: -135deg; translate: -2px 0; }
+.visor__nav:focus-visible i { outline: 2px solid var(--lacre); outline-offset: 3px; }
+.visor__nav:focus-visible { outline: none; }
 
 .visor__ficha {
   display: grid;

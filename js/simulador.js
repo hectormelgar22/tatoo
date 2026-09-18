@@ -87,8 +87,9 @@
               '<span class="val" data-val-opacidad>85 %</span></span>' +
             '<input id="sim-opacidad" type="range" min="15" max="100" value="85" data-opacidad>' +
           "</div>" +
-          '<p class="xs fg-3">Para moverlo, arrastra sobre la foto. En móvil, ' +
-            'pellizca con dos dedos para escalar y girar.</p>' +
+          '<p class="xs fg-3">Arrastra el diseño para moverlo. Con ratón vale ' +
+            'con arrastrar en cualquier punto de la foto; con el dedo, agárralo ' +
+            'y pellizca con dos dedos para escalar y girar.</p>' +
         "</div>" +
 
         '<div class="pasos__nav">' +
@@ -211,6 +212,8 @@
       var vieja = escena.querySelector(".sim__foto");
       if (vieja) vieja.remove();
       escena.insertBefore(img, escena.firstChild);
+      /* Con foto cargada ya hay algo que arrastrar: la escena lo anuncia. */
+      escena.setAttribute("data-listo", "");
       btnDescargar.disabled = false;
       aviso.textContent = "";
       pintarPieza();
@@ -255,12 +258,22 @@
       };
     }
 
+    /* Sin esto, presionar sobre la foto o sobre un diseno propio arranca el
+       arrastre nativo de imagenes del navegador y el gesto se muere ahi.    */
+    escena.addEventListener("dragstart", function (e) { e.preventDefault(); });
+
     escena.addEventListener("pointerdown", function (e) {
       if (!urlFoto) return;
+      /* Con el dedo, solo se arrastra agarrando el diseno. Si la escena
+         entera capturase el gesto, no se podria pasar de largo esta seccion
+         en el movil: ocupa casi toda la pantalla.                          */
+      if (e.pointerType === "touch" && !e.target.closest(".sim__pieza")) return;
+      e.preventDefault();
       escena.setPointerCapture(e.pointerId);
       punteros.set(e.pointerId, { x: e.clientX, y: e.clientY });
       var c = centro();
       inicio = { c: c, x: st.x, y: st.y, escala: st.escala, giro: st.giro };
+      if (pieza) pieza.setAttribute("data-agarrada", "");
     });
 
     escena.addEventListener("pointermove", function (e) {
@@ -287,7 +300,10 @@
 
     function soltar(e) {
       punteros.delete(e.pointerId);
-      if (punteros.size === 0) inicio = null;
+      if (punteros.size === 0) {
+        inicio = null;
+        if (pieza) pieza.removeAttribute("data-agarrada");
+      }
       else { var c = centro(); inicio = { c: c, x: st.x, y: st.y, escala: st.escala, giro: st.giro }; }
     }
     escena.addEventListener("pointerup", soltar);

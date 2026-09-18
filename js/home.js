@@ -103,25 +103,74 @@
 
   /* --- indice de herramientas ------------------------------------------------ */
 
+  /* Cada herramienta lleva su propio dibujo, trazado con la misma pluma que el
+     resto del sitio: una escala graduada, dos laminas superpuestas, un pliego
+     de flash y una linea de tiempo. No son iconos de libreria; son el aparato
+     que representa cada herramienta, y la marca de indice en lacre senala el
+     punto que importa.                                                       */
+  var DIBUJOS = {
+    /* Escala graduada: lo que hace el estimador es medir. */
+    estimador:
+      '<svg viewBox="0 0 120 56" fill="none" aria-hidden="true">' +
+        '<path d="M6 40h108" stroke="currentColor" stroke-width="1"/>' +
+        '<path d="M6 40V24M28 40v-9M50 40v-9M72 40v-9M94 40v-9M114 40V24" ' +
+          'stroke="currentColor" stroke-width="1"/>' +
+        '<path class="util__marca" d="M72 46V16" stroke-width="3" stroke-linecap="square"/>' +
+      "</svg>",
+    /* Dos laminas: la foto debajo, el diseno encima y movible. */
+    simulador:
+      '<svg viewBox="0 0 120 56" fill="none" aria-hidden="true">' +
+        '<rect x="6" y="8" width="72" height="42" stroke="currentColor" stroke-width="1"/>' +
+        '<rect x="46" y="20" width="60" height="30" stroke="currentColor" ' +
+          'stroke-width="1" stroke-dasharray="4 4"/>' +
+        '<path class="util__marca" d="M76 35h18M88 29l6 6-6 6" stroke-width="2" ' +
+          'stroke-linecap="square" fill="none"/>' +
+      "</svg>",
+    /* Pliego de flash: las ocho laminas, una ya fuera del registro. */
+    flash:
+      '<svg viewBox="0 0 120 56" fill="none" aria-hidden="true">' +
+        '<rect x="6" y="8" width="22" height="18" stroke="currentColor" stroke-width="1"/>' +
+        '<rect x="34" y="8" width="22" height="18" stroke="currentColor" stroke-width="1"/>' +
+        '<rect x="62" y="8" width="22" height="18" stroke="currentColor" stroke-width="1"/>' +
+        '<rect x="90" y="8" width="22" height="18" stroke="currentColor" stroke-width="1"/>' +
+        '<rect x="6" y="32" width="22" height="18" stroke="currentColor" stroke-width="1"/>' +
+        '<rect x="34" y="32" width="22" height="18" stroke="currentColor" stroke-width="1"/>' +
+        '<rect class="util__marca--relleno" x="62" y="32" width="22" height="18" stroke-width="1"/>' +
+        '<rect x="90" y="32" width="22" height="18" stroke="currentColor" stroke-width="1"/>' +
+      "</svg>",
+    /* Linea de tiempo: dia 0 marcado, el resto por venir. */
+    cuidados:
+      '<svg viewBox="0 0 120 56" fill="none" aria-hidden="true">' +
+        '<path d="M6 29h108" stroke="currentColor" stroke-width="1"/>' +
+        '<circle cx="33" cy="29" r="4" stroke="currentColor" stroke-width="1"/>' +
+        '<circle cx="60" cy="29" r="4" stroke="currentColor" stroke-width="1"/>' +
+        '<circle cx="87" cy="29" r="4" stroke="currentColor" stroke-width="1"/>' +
+        '<path class="util__marca" d="M6 21v16" stroke-width="3" stroke-linecap="square"/>' +
+      "</svg>"
+  };
+
   var HERRAMIENTAS = [
-    { n: "I",   titulo: S.textos.estimador.titular,  href: "reservar.html#estimador",
+    { n: "I",   dib: "estimador", titulo: S.textos.estimador.titular,  href: "reservar.html#estimador",
       texto: S.textos.estimador.entradilla, ir: "Calcular" },
-    { n: "II",  titulo: S.textos.simulador.titular,  href: "reservar.html#simulador",
+    { n: "II",  dib: "simulador", titulo: S.textos.simulador.titular,  href: "reservar.html#simulador",
       texto: S.textos.simulador.entradilla, ir: "Probar" },
-    { n: "III", titulo: S.textos.flash.titular,      href: "galeria.html#flash",
+    { n: "III", dib: "flash",     titulo: S.textos.flash.titular,      href: "galeria.html#flash",
       texto: S.textos.flash.entradilla, ir: "Ver flash" },
-    { n: "IV",  titulo: S.textos.cuidados.titular,   href: "cuidados.html",
+    { n: "IV",  dib: "cuidados",  titulo: S.textos.cuidados.titular,   href: "cuidados.html",
       texto: S.textos.cuidados.entradilla, ir: "Leer" }
   ];
 
   set("[data-indice]",
-    '<div class="indice">' +
+    '<div class="utiles">' +
     HERRAMIENTAS.map(function (h) {
-      return '<a class="indice__fila" href="' + esc(h.href) + '">' +
-        '<span class="plate-no indice__num">' + esc(h.n) + "</span>" +
-        '<span class="indice__titulo">' + esc(h.titulo) + "</span>" +
-        '<span class="indice__texto">' + esc(h.texto) + "</span>" +
-        '<span class="indice__ir">' + esc(h.ir) + "</span>" +
+      return '<a class="util" href="' + esc(h.href) + '">' +
+        '<span class="util__cabecera">' +
+          '<span class="plate-no util__num">' + esc(h.n) + "</span>" +
+          '<span class="util__dibujo">' + (DIBUJOS[h.dib] || "") + "</span>" +
+        "</span>" +
+        '<span class="util__titulo">' + esc(h.titulo) + "</span>" +
+        '<span class="util__texto">' + esc(h.texto) + "</span>" +
+        '<span class="util__ir">' + esc(h.ir) + '<i aria-hidden="true"></i></span>' +
       "</a>";
     }).join("") +
     "</div>");

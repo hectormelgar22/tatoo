@@ -54,7 +54,7 @@
 .btn--stamp:focus-visible { outline-color: var(--paper); outline-offset: 2px; }
 .btn--stamp:active { --btn-bg: var(--lacre-deep); --btn-bd: var(--lacre-deep); }
 @media (hover: hover) and (pointer: fine) {
-  .btn--stamp:hover { --btn-bg: #D42234; --btn-bd: #D42234; }
+  .btn--stamp:hover { --btn-bg: var(--lacre-lit); --btn-bd: var(--lacre-lit); }
 }
 
 .btn--quiet { --btn-bd: transparent; --btn-fg: var(--fg-2); padding-inline: var(--s3); }

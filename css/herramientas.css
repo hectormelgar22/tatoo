@@ -187,6 +187,49 @@
 .op input:checked + .op__caja .op__t { font-weight: 600; }
 .op input:focus-visible + .op__caja { outline: 2px solid var(--lacre); outline-offset: 3px; }
 
+/* --- MUESTRAS DE ESTILO ----------------------------------------------------- */
+/* Un nombre de estilo no significa nada para quien entra de cero. Cada opcion
+   lleva una plancha del registro y un enlace al registro filtrado. El enlace
+   va FUERA de la etiqueta: dentro, pulsarlo marcaria ademas el radio.        */
+
+.ops--muestras { gap: var(--s4); }
+.muestra { display: grid; gap: var(--s2); }
+
+.op__caja--muestra {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--s4);
+  padding: var(--s3);
+}
+.muestra__lamina {
+  display: block;
+  width: 4.5rem;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--ink-inset);
+}
+.muestra__lamina img { width: 100%; height: 100%; object-fit: cover; }
+/* Sin obra todavia: un hueco tramado, no una caja vacia que parece un error. */
+.muestra__sin {
+  display: block;
+  width: 100%; height: 100%;
+  background: repeating-linear-gradient(-45deg,
+    transparent 0 5px, var(--rule-lit) 5px 6px);
+}
+.muestra__texto { display: grid; gap: var(--s1); }
+
+.muestra__ver {
+  justify-self: start;
+  padding-left: var(--s3);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+}
+a.muestra__ver { color: var(--fg-2); text-underline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  a.muestra__ver:hover { color: var(--fg); }
+}
+.muestra__ver--vacio { color: var(--fg-mute); }
+
 /* Referencia visual de tamano: una barra a escala real junto a cada opcion. */
 .op__escala { height: 3px; background: var(--fg-mute); margin-top: var(--s2); }
 
@@ -270,10 +313,20 @@
   overflow: hidden;
   background: var(--ink-inset);
   border: var(--hair) solid var(--rule-lit);
-  touch-action: none;
   display: grid;
   place-items: center;
 }
+/* Con el raton se arrastra desde cualquier punto de la escena, asi que la
+   escena entera anuncia que se puede agarrar.                              */
+.sim__escena[data-listo] { cursor: grab; }
+.sim__escena[data-listo]:active { cursor: grabbing; }
+
+/* La foto y el diseno son imagenes, y al presionar sobre una imagen el
+   navegador arranca su propio arrastre: aparece un fantasma colgando del
+   cursor y los eventos de puntero dejan de llegar. Ahi es donde se atascaba
+   el gesto.                                                                */
+.sim__escena img, .sim__escena svg { -webkit-user-drag: none; user-select: none; }
+
 .sim__escena img.sim__foto { width: 100%; height: 100%; object-fit: cover; }
 
 .sim__pieza {
@@ -282,8 +335,21 @@
   width: 34%;
   cursor: grab;
   will-change: transform;
+  /* En tactil el gesto se ancla aqui: sobre el resto de la escena el dedo
+     sirve para desplazar la pagina, que es lo que espera cualquiera ante un
+     bloque que ocupa casi toda la pantalla del movil.                      */
+  touch-action: none;
 }
 .sim__pieza:active { cursor: grabbing; }
+/* Mientras se mueve se ve el contorno de la pieza: sin el, en un diseno de
+   linea fina no se sabe que se esta agarrando.                             */
+.sim__pieza[data-agarrada]::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: var(--hair) dashed var(--fg-mute);
+  pointer-events: none;
+}
 .sim__pieza svg { width: 100%; height: auto; display: block; }
 
 .sim__vacio {

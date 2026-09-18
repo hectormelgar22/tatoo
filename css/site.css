@@ -115,7 +115,7 @@
 }
 .nav__link--cita:focus-visible { outline-color: var(--paper); outline-offset: 2px; }
 @media (hover: hover) and (pointer: fine) {
-  .nav__link--cita:hover { color: var(--paper); background: #D42234; }
+  .nav__link--cita:hover { color: var(--paper); background: var(--lacre-lit); }
 }
 .nav__link--cita[aria-current="page"] { box-shadow: none; }
 
@@ -233,53 +233,86 @@
               opacity 260ms var(--ease-out);
 }
 
-/* --- INDICE DEL REGISTRO --------------------------------------------------- */
-/* Filas de un indice impreso, no tres tarjetas iguales con un icono arriba.  */
+/* --- HERRAMIENTAS DE LA PORTADA -------------------------------------------- */
+/* Es lo que esta web tiene y las de la competencia no, asi que se ve como lo
+   que es: cuatro aparatos, cada uno con su dibujo y su numero de indice. No
+   son tarjetas con esquinas redondeadas y sombra; son fichas de un pliego,
+   con filete recto y el papel virando cuando pasas por encima.               */
 
-.indice { border-top: var(--hair) solid var(--rule); }
-
-.indice__fila {
+.utiles {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: baseline;
-  gap: var(--s3) var(--s5);
-  padding-block: var(--s5);
-  border-bottom: var(--hair) solid var(--rule);
+  gap: var(--hair);
+  background: var(--rule);
+  border: var(--hair) solid var(--rule);
+}
+@media (min-width: 40rem) { .utiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.util {
+  display: grid;
+  align-content: start;
+  gap: var(--s3);
+  padding: var(--s5);
+  background: var(--ink);
   text-decoration: none;
-  transition: background-color var(--t-fast) ease;
+  transition: background-color var(--t-ui) ease;
 }
-.indice__fila > * { min-width: 0; }
-@media (hover: hover) and (pointer: fine) {
-  .indice__fila:hover { background: var(--ink-field); }
-  .indice__fila:hover .indice__ir { color: var(--lacre); transform: translateX(3px); }
+.util > * { min-width: 0; }
+
+.util__cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+  margin-bottom: var(--s2);
 }
-.indice__titulo {
+.util__num { flex: none; }
+
+.util__dibujo { display: block; width: 7.5rem; color: var(--fg-mute); }
+.util__dibujo svg { display: block; width: 100%; height: auto; }
+/* La marca de indice: el unico lacre del dibujo, y solo donde senala algo. */
+.util__dibujo .util__marca { stroke: var(--lacre); }
+.util__dibujo .util__marca--relleno { fill: var(--lacre); stroke: var(--lacre); }
+
+.util__titulo {
   font-family: var(--ff-display);
   font-optical-sizing: auto;
   font-size: var(--fs-d3);
-  line-height: 1.14;
+  line-height: 1.1;
   letter-spacing: var(--tr-d3);
   font-weight: 500;
+  color: var(--fg);
 }
-.indice__texto { grid-column: 1 / -1; color: var(--fg-2); font-size: var(--fs-sm); max-width: 54ch; }
-.indice__ir {
+.util__texto { color: var(--fg-2); font-size: var(--fs-sm); max-width: 46ch; }
+
+.util__ir {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  margin-top: var(--s3);
   font-size: var(--fs-label);
   font-weight: 700;
   font-stretch: 88%;
   letter-spacing: var(--tr-label);
   text-transform: uppercase;
-  color: var(--fg-3);
-  white-space: nowrap;
-  transition: color var(--t-fast) ease, transform var(--t-fast) var(--ease-out);
+  color: var(--fg-2);
+  transition: color var(--t-fast) ease;
+}
+/* Punta trazada, no un glifo haciendo de icono. */
+.util__ir i {
+  width: 7px; height: 7px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  rotate: 45deg;
+  transition: translate var(--t-fast) var(--ease-out);
 }
 
-@media (min-width: 48rem) {
-  .indice__fila { grid-template-columns: 4.5rem minmax(0, 20rem) minmax(0, 1fr) auto; align-items: start; }
-  .indice__num { grid-row: 1; }
-  .indice__titulo { grid-row: 1; }
-  .indice__texto { grid-column: 3; grid-row: 1; }
-  .indice__ir { grid-row: 1; }
+@media (hover: hover) and (pointer: fine) {
+  .util:hover { background: var(--ink-field); }
+  .util:hover .util__dibujo { color: var(--fg-3); }
+  .util:hover .util__ir { color: var(--lacre); }
+  .util:hover .util__ir i { translate: 3px 0; }
 }
+.util:focus-visible { outline: 2px solid var(--lacre); outline-offset: -4px; }
 
 /* --- TIRA DE ARTISTAS ------------------------------------------------------ */
 /* Filas alternas, no una rejilla de cuatro retratos iguales. */
@@ -360,6 +393,56 @@
 .pie__legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s3) var(--s5); }
 .pie__legales { display: flex; flex-wrap: wrap; gap: var(--s4); }
 .pie__legales a { color: var(--fg-3); }
+/* El boton flotante cae justo encima de esta esquina. Los enlaces legales
+   tienen que poder pulsarse, asi que se les reserva el sitio en vez de
+   dejarlos debajo.                                                          */
+[data-wasap-activo] .pie__legal { padding-bottom: calc(var(--touch) + var(--s4)); }
+
+/* --- BOTON FLOTANTE DE WHATSAPP -------------------------------------------- */
+/* Va por debajo del visor y de la franja de edad: nada debe taparlos.        */
+
+.wasap {
+  position: fixed;
+  right: var(--gutter);
+  bottom: calc(var(--s5) + env(safe-area-inset-bottom));
+  z-index: var(--z-wasap);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s3);
+  min-height: var(--touch);
+  padding: 0 var(--s4);
+  background: var(--lacre);
+  color: var(--paper);
+  border: var(--hair) solid var(--lacre);
+  text-decoration: none;
+  font-size: var(--fs-label);
+  font-weight: 700;
+  font-stretch: 88%;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  box-shadow: 0 10px 30px -18px rgba(0, 0, 0, .95);
+  transition: background-color var(--t-fast) ease, transform var(--t-press) var(--ease-out);
+}
+.wasap__marca { width: 20px; height: 20px; flex: none; }
+@media (hover: hover) and (pointer: fine) {
+  .wasap:hover { background: var(--lacre-lit); border-color: var(--lacre-lit); }
+}
+.wasap:active { transform: scale(0.97); }
+.wasap:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
+
+/* Mientras se pregunta la edad no hay nada que consultar por WhatsApp: esa
+   respuesta va primero, y ademas la franja ocupa justo ese sitio.            */
+[data-edad] .wasap { opacity: 0; visibility: hidden; transform: translateY(6px); }
+
+/* En pantallas estrechas el rotulo estorba: queda la marca, y el nombre
+   accesible lo sigue diciendo entero.                                        */
+@media (max-width: 29.999rem) {
+  .wasap { padding: 0; width: var(--touch); justify-content: center; }
+  .wasap__texto {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip-path: inset(50%); white-space: nowrap;
+  }
+}
 
 /* --- FRANJA DE EDAD -------------------------------------------------------- */
 
