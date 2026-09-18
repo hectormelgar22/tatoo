@@ -300,6 +300,32 @@ a.muestra__ver { color: var(--fg-2); text-underline-offset: 3px; }
 .salida__aviso { margin-top: var(--s5); font-size: var(--fs-xs); line-height: 1.5;
   color: var(--plate-fg-3); max-width: 46ch; }
 
+/* En una sola columna la plancha cae detras de los seis pasos: la cifra se
+   actualiza con cada respuesta en un sitio que no se ve, asi que parece que
+   el estimador no calcula nada. Sube arriba y se queda pegada bajo la barra
+   mientras se contesta. Compacta, porque en un movil lo que tiene que caber
+   debajo es la pregunta.                                                     */
+@media (max-width: 47.999rem) {
+  .salida {
+    order: -1;
+    position: sticky;
+    top: calc(var(--nav-marca) + var(--s3) * 2);
+    z-index: var(--z-sticky);
+    padding: var(--s4) var(--s5);
+  }
+  .salida__cifra { font-size: clamp(1.9rem, 1.1rem + 3.4vw, 2.6rem); }
+  /* Las tres cifras del reparto, en linea en vez de en tres filas. */
+  .salida__reparto {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s1) var(--s4);
+    margin-top: var(--s3);
+    padding-top: var(--s3);
+  }
+  .salida__fila { gap: var(--s2); }
+  .salida__aviso { margin-top: var(--s3); }
+}
+
 /* --- SIMULADOR -------------------------------------------------------------- */
 
 .sim { display: grid; gap: var(--s5); }
@@ -310,6 +336,9 @@ a.muestra__ver { color: var(--fg-2); text-underline-offset: 3px; }
 .sim__escena {
   position: relative;
   aspect-ratio: 4 / 5;
+  /* En un movil, 4/5 de ancho completo es casi la pantalla entera, y antes de
+     subir la foto lo unico que hay ahi es un hueco vacio.                    */
+  max-height: 62vh;
   overflow: hidden;
   background: var(--ink-inset);
   border: var(--hair) solid var(--rule-lit);
@@ -502,19 +531,26 @@ input[type="range"]::-moz-range-thumb {
 }
 /* El navegador escribe "Ningun archivo seleccionado" al lado del boton y no
    deja darle formato: en una columna estrecha se parte en un "Nin...nado" que
-   parece un error. Se oculta ese texto y el estado lo cuenta la propia
-   herramienta, que ademas ensena la foto en el lienzo.                       */
-.input[type="file"] { color: transparent; }
+   parece un error. Se oculta ese texto, y para que no quede una caja vacia
+   al lado, el boton ocupa el control entero. Lo que confirma la eleccion es
+   la propia herramienta: la foto aparece en el lienzo y las referencias
+   aparecen en su lista.                                                      */
+.input[type="file"] {
+  color: transparent;
+  padding: 0;
+  border: 0;
+}
 
 .input[type="file"]::file-selector-button {
-  margin-right: var(--s4);
+  width: 100%;
+  margin: 0;
   padding: 0 var(--s4);
-  height: calc(var(--touch) - 2px);
+  height: var(--touch);
   background: var(--ink-field);
   color: var(--fg);
-  border: 0;
-  border-right: var(--hair) solid var(--rule-fn);
+  border: var(--hair) solid var(--rule-fn);
   border-radius: 0;
+  text-align: left;
   cursor: pointer;
   font-family: var(--ff-text);
   font-size: var(--fs-label);

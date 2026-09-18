@@ -114,32 +114,61 @@
         '<span class="nav__abrir-txt">Menu</span>' +
         '<span class="nav__abrir-barras" aria-hidden="true"><i></i><i></i></span>' +
       "</button>" +
+      '<div class="nav__velo" data-velo aria-hidden="true"></div>' +
       '<nav id="nav-menu" class="nav__menu" aria-label="Principal">' +
         '<ul class="nav__lista" role="list">' + enlaces + "</ul>" +
       "</nav>";
 
     var boton = $(".nav__abrir", host);
     var menu = $(".nav__menu", host);
+    var velo = $(".nav__velo", host);
+    var rotulo = $(".nav__abrir-txt", boton);
 
-    function cerrar() {
-      boton.setAttribute("aria-expanded", "false");
+    /* Con el cajon abierto, lo que hay detras deja de existir para el teclado
+       y para el lector de pantalla. La barra queda fuera porque el header no
+       esta dentro de .page: por eso el boton de cerrar sigue alcanzable.    */
+    function detras(apagado) {
+      $$(".page, .wasap").forEach(function (n) {
+        if (apagado) n.setAttribute("inert", "");
+        else n.removeAttribute("inert");
+      });
+    }
+
+    function pintarBoton(abierto) {
+      boton.setAttribute("aria-expanded", String(abierto));
+      /* El rotulo dice lo que va a pasar al pulsarlo. Con "Menu" fijo, quien
+         no reconoce el aspa no sabe como salir.                             */
+      if (rotulo) rotulo.textContent = abierto ? "Cerrar" : "Menu";
+    }
+
+    function cerrar(devolverFoco) {
+      if (boton.getAttribute("aria-expanded") !== "true") return;
+      pintarBoton(false);
       document.documentElement.removeAttribute("data-menu");
+      detras(false);
+      if (devolverFoco) boton.focus();
+    }
+    function abrir() {
+      pintarBoton(true);
+      document.documentElement.setAttribute("data-menu", "");
+      detras(true);
+      var primero = $("a", menu);
+      if (primero) primero.focus();
     }
     function alternar() {
-      var abierto = boton.getAttribute("aria-expanded") === "true";
-      boton.setAttribute("aria-expanded", String(!abierto));
-      if (abierto) document.documentElement.removeAttribute("data-menu");
-      else document.documentElement.setAttribute("data-menu", "");
+      if (boton.getAttribute("aria-expanded") === "true") cerrar(true);
+      else abrir();
     }
     boton.addEventListener("click", alternar);
-    menu.addEventListener("click", function (e) { if (e.target.closest("a")) cerrar(); });
+    if (velo) velo.addEventListener("click", function () { cerrar(true); });
+    menu.addEventListener("click", function (e) { if (e.target.closest("a")) cerrar(false); });
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && boton.getAttribute("aria-expanded") === "true") {
-        cerrar(); boton.focus();
-      }
+      if (e.key === "Escape") cerrar(true);
     });
     /* Al pasar a ancho de escritorio el menu deja de ser un cajon. */
-    window.matchMedia("(min-width: 60rem)").addEventListener("change", cerrar);
+    window.matchMedia("(min-width: 60rem)").addEventListener("change", function () {
+      cerrar(false);
+    });
 
     /* Borde de scroll: la barra se separa del contenido solo cuando hay
        contenido debajo, en vez de llevar un filete permanente.               */

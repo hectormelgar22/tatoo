@@ -204,6 +204,9 @@ body::after {
   background: var(--lacre);
   color: var(--paper);
   padding: var(--s3) var(--s5);
+  min-height: var(--touch);
+  display: inline-flex;
+  align-items: center;
   font-size: var(--fs-label);
   font-stretch: 88%;
   font-weight: 600;

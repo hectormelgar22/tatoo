@@ -121,6 +121,10 @@
 
 .nav__abrir {
   display: none;
+  /* Por encima del cajon. Sin esto el cajon tapa el boton con el que se
+     cierra, y la unica forma de salir es elegir una opcion del menu.        */
+  position: relative;
+  z-index: 2;
   align-items: center;
   gap: var(--s2);
   min-height: var(--touch);
@@ -145,8 +149,29 @@
 
 @media (max-width: 59.999rem) {
   .nav__abrir { display: inline-flex; }
+
+  /* Velo: cierra al tocar fuera del cajon. Sin el, tocar "fuera" cae sobre la
+     pagina y lo que ocurre es que te vas a otro sitio sin querer.           */
+  .nav__velo {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: color-mix(in srgb, var(--ink) 72%, transparent);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--t-panel) var(--ease-drawer), visibility 0s linear var(--t-panel);
+  }
+  [data-menu] .nav__velo {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--t-panel) var(--ease-drawer), visibility 0s;
+  }
+  /* Con el cajon abierto, la pagina de debajo no se mueve. */
+  [data-menu] { overflow: hidden; }
+
   .nav__menu {
     position: fixed;
+    z-index: 1;
     inset: 0 0 0 auto;
     width: min(20rem, 84vw);
     padding: calc(var(--touch) + var(--s7)) var(--gutter) var(--s7);
@@ -365,6 +390,13 @@
 .hueco__cuando { font-size: var(--fs-sm); }
 .hueco__cuando b { font-weight: 600; }
 .hueco__nota { grid-column: 1 / -1; color: var(--fg-3); font-size: var(--fs-xs); }
+/* En una columna el boton se estiraba de borde a borde y quedaba una banda
+   vacia debajo de cada hueco. Aqui es una estampilla: del ancho de su texto
+   y alineada con la fecha.                                                   */
+@media (max-width: 39.999rem) {
+  .hueco { grid-template-columns: minmax(0, 1fr); gap: var(--s3); }
+  .hueco .btn { justify-self: start; }
+}
 @media (min-width: 40rem) {
   .hueco { grid-template-columns: 12rem minmax(0, 1fr) auto; }
   .hueco__nota { grid-column: 2; }
@@ -385,7 +417,18 @@
 @media (min-width: 48rem) {
   .pie__cuerpo { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: var(--s6); }
 }
-.pie__dir { margin-top: var(--s3); font-style: normal; line-height: 1.7; }
+.pie__dir { margin-top: var(--s3); font-style: normal; }
+/* El telefono, el Instagram y los enlaces legales median 15 px de alto: en un
+   movil eso no se acierta con el pulgar. Se les da caja propia hasta pasar de
+   los 24 px que pide WCAG 2.5.8.
+   Sin margen negativo: con el, la caja de cada enlace se metia dentro de la
+   del renglon de al lado y el objetivo volvia a quedarse corto por quedar
+   medio tapado. El sitio se saca subiendo el interlineado.                   */
+.pie__dir { line-height: 2.1; }
+.pie__dir a, .pie__legales a {
+  display: inline-block;
+  padding-block: 5px;
+}
 .pie__horas { margin-top: var(--s3); display: grid; gap: var(--s2); }
 .pie__hora { display: flex; justify-content: space-between; gap: var(--s4); color: var(--fg-2); }
 .pie__hora dd { margin: 0; color: var(--fg-3); }

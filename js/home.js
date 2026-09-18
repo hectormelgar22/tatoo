@@ -193,7 +193,7 @@
           '<p class="hueco__cuando num"><b>' + esc(N.fechaLarga(h.fecha)) + "</b><br>" +
             esc(h.hora) + " · " + esc(h.duracion) + "</p>" +
           '<p class="hueco__nota">' + esc(a.nombre) + ". " + esc(h.nota) + "</p>" +
-          '<a class="btn" href="reservar.html?hueco=' + esc(h.fecha) + "_" + esc(h.hora) +
+          '<a class="btn btn--stamp" href="reservar.html?hueco=' + esc(h.fecha) + "_" + esc(h.hora) +
             '">Lo quiero</a>' +
         "</div>";
       }).join("") +
