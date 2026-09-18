@@ -1,0 +1,141 @@
+/* =============================================================================
+   NIGREDO · TIPOGRAFIA
+   Bodoni Moda con eje opsz real para titulares; Archivo variable para todo lo
+   demas. Tracking e interlineado son especificos de cada tamano: un unico
+   letter-spacing global siempre esta mal en algun punto de la escala.
+   ========================================================================== */
+
+.d1, .d2, .d3, .d4 {
+  font-family: var(--ff-display);
+  font-optical-sizing: auto;   /* el eje opsz engorda el trazo fino al reducir */
+  font-weight: 500;
+  text-wrap: balance;
+}
+
+.d1 { font-size: var(--fs-d1); line-height: var(--lh-d1); letter-spacing: var(--tr-d1); }
+.d2 { font-size: var(--fs-d2); line-height: var(--lh-d2); letter-spacing: var(--tr-d2); }
+.d3 { font-size: var(--fs-d3); line-height: var(--lh-d3); letter-spacing: var(--tr-d3); }
+.d4 { font-size: var(--fs-d4); line-height: var(--lh-d4); letter-spacing: var(--tr-d4); font-weight: 600; }
+
+.lead {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-lead);
+  letter-spacing: var(--tr-lead);
+  color: var(--fg-2);
+  max-width: var(--measure-tight);
+}
+
+.body  { max-width: var(--measure); }
+.body + .body { margin-top: var(--s4); }
+
+.sm  { font-size: var(--fs-sm);  line-height: var(--lh-sm); letter-spacing: var(--tr-sm); }
+.xs  { font-size: var(--fs-xs);  line-height: 1.5; letter-spacing: 0.01em; }
+
+/* Versalita de ficha. Vive en el margen, en una cabecera de columna o en la
+   etiqueta de un campo. NUNCA encima de un titular haciendo de antetitulo.   */
+.label {
+  font-family: var(--ff-text);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  font-stretch: 88%;
+  line-height: var(--lh-label);
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  color: var(--fg-mute);
+}
+
+/* Cifras. Precios, sesiones, horas, centimetros, numeros de plancha: todo lo
+   medible se alinea en columna con cifras tabulares. No es mono de adorno;
+   es que las cifras tienen que cuadrar unas debajo de otras.                 */
+.num {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+.fg-2 { color: var(--fg-2); }
+.fg-3 { color: var(--fg-3); }
+
+/* --- PRIMITIVAS DEL REGISTRO ---------------------------------------------- */
+
+/* Numero de plancha: la direccion de la obra. Es citable y es un enlace real.
+
+   El numero NO va en lacre. A 11 px el lacre da 3,38:1 sobre tinta y se queda
+   por debajo del 4,5:1 que exige el texto pequeno. La senal de "esto es una
+   direccion viva" la lleva una marca de indice al lado, que como grafico solo
+   necesita 3:1; el numero se lee en blanco a 16,44:1. Misma lectura, y ademas
+   es lo que hace una lamina de verdad: la tinta roja es el sello, no el texto. */
+.plate-no {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  font-family: var(--ff-text);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  font-stretch: 88%;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--fg);
+  white-space: nowrap;
+}
+.plate-no::before {
+  content: "";
+  flex: none;
+  width: 3px;
+  height: 0.9em;
+  background: var(--lacre);
+}
+.plate-no abbr { text-decoration: none; }
+
+/* Bloque estampado. El lacre no llega a 4.5:1 sobre tinta, asi que cuando
+   tiene que llevar texto se vuelve solido y el texto se cala en papel.
+   La restriccion y la estetica coinciden: un sello es exactamente esto.      */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  background: var(--lacre);
+  color: var(--paper);
+  padding: 0.35em 0.7em 0.3em;
+  font-size: var(--fs-label);
+  font-weight: 700;
+  font-stretch: 88%;
+  line-height: 1.1;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Filete. El grabado esta aqui: en la linea de un pelo, no en el ornamento.  */
+.rule {
+  border: 0;
+  border-top: var(--hair) solid var(--rule);
+  margin: 0;
+}
+.rule--lit { border-top-color: var(--rule-lit); }
+
+/* Nota al margen: va AL LADO del texto, no encima del titular.               */
+.marginalia {
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+  color: var(--fg-3);
+  max-width: 22ch;
+}
+
+/* Cita / declaracion del estudio. Bodoni en cursiva sintetica no existe en
+   este subset, asi que la voz se marca con peso y medida, no con italica.    */
+.statement {
+  font-family: var(--ff-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--fs-d3);
+  line-height: 1.24;
+  letter-spacing: var(--tr-d3);
+  max-width: 24ch;
+}
+
+/* Texto sobre plancha de papel */
+.on-paper { color: var(--plate-fg); }
+.on-paper .fg-2, .on-paper .lead { color: var(--plate-fg-2); }
+.on-paper .fg-3, .on-paper .label, .on-paper .marginalia { color: var(--plate-fg-3); }
+.on-paper .plate-no { color: var(--plate-fg); }
+.on-paper ::selection { background: var(--lacre); color: var(--paper); }

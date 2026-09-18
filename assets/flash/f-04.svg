@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 280" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Ojo seccionado">
+<title>Ojo seccionado</title>
+
+  <path d="M26 140c28-38 54-56 74-56s46 18 74 56c-28 38-54 56-74 56s-46-18-74-56z"/>
+  <circle cx="100" cy="140" r="34"/>
+  <circle cx="100" cy="140" r="15"/>
+  <path d="M100 84v-24M100 196v24"/>
+  <path d="M100 106v14M100 160v14"/>
+  <path d="M60 118l-16-14M140 118l16-14M60 162l-16 14M140 162l16 14"/>
+  <path d="M100 60v-16" stroke-dasharray="4 7"/>
+  <path d="M100 236v-16" stroke-dasharray="4 7"/>
+</svg>

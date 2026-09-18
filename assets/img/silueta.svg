@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 560"
+     class="silueta" role="radiogroup" aria-label="Mapa corporal: elige la zona">
+<g class="silueta__cuerpo"><ellipse cx="108" cy="60" rx="25" ry="31"/></g>
+<g class="silueta__zona" data-zona="cuello" role="radio" aria-checked="false" tabindex="-1" aria-label="cuello"><polygon points="95.0,88.0 121.0,88.0 123.0,110.0 93.0,110.0"/></g>
+<g class="silueta__zona" data-zona="hombro" role="radio" aria-checked="false" tabindex="-1" aria-label="hombro"><polygon points="88.0,110.0 54.0,122.0 46.0,152.0 68.0,154.0 80.0,126.0"/><polygon points="128.0,110.0 162.0,122.0 170.0,152.0 148.0,154.0 136.0,126.0"/></g>
+<g class="silueta__zona" data-zona="pecho" role="radio" aria-checked="false" tabindex="-1" aria-label="pecho"><polygon points="88.0,112.0 128.0,112.0 148.0,154.0 146.0,184.0 70.0,184.0 68.0,154.0"/></g>
+<g class="silueta__zona" data-zona="abdomen" role="radio" aria-checked="false" tabindex="-1" aria-label="abdomen"><polygon points="70.0,186.0 146.0,186.0 142.0,250.0 74.0,250.0"/></g>
+<g class="silueta__zona" data-zona="costillas" role="radio" aria-checked="false" tabindex="-1" aria-label="costillas"><polygon points="69.0,158.0 78.0,160.0 78.0,222.0 70.0,220.0"/><polygon points="147.0,158.0 138.0,160.0 138.0,222.0 146.0,220.0"/></g>
+<g class="silueta__zona" data-zona="brazo" role="radio" aria-checked="false" tabindex="-1" aria-label="brazo"><polygon points="54.0,124.0 36.0,138.0 30.0,202.0 46.0,206.0 50.0,150.0"/><polygon points="162.0,124.0 180.0,138.0 186.0,202.0 170.0,206.0 166.0,150.0"/></g>
+<g class="silueta__zona" data-zona="antebrazo" role="radio" aria-checked="false" tabindex="-1" aria-label="antebrazo"><polygon points="30.0,204.0 46.0,208.0 40.0,280.0 24.0,278.0"/><polygon points="186.0,204.0 170.0,208.0 176.0,280.0 192.0,278.0"/></g>
+<g class="silueta__zona" data-zona="mano" role="radio" aria-checked="false" tabindex="-1" aria-label="mano"><polygon points="24.0,282.0 41.0,284.0 43.0,320.0 22.0,318.0"/><polygon points="192.0,282.0 175.0,284.0 173.0,320.0 194.0,318.0"/></g>
+<g class="silueta__zona" data-zona="muslo" role="radio" aria-checked="false" tabindex="-1" aria-label="muslo"><polygon points="74.0,252.0 105.0,252.0 104.0,364.0 76.0,366.0"/><polygon points="142.0,252.0 111.0,252.0 112.0,364.0 140.0,366.0"/></g>
+<g class="silueta__zona" data-zona="gemelo" role="radio" aria-checked="false" tabindex="-1" aria-label="gemelo"><polygon points="76.0,368.0 103.0,366.0 100.0,468.0 80.0,470.0"/><polygon points="140.0,368.0 113.0,366.0 116.0,468.0 136.0,470.0"/></g>
+<g class="silueta__zona" data-zona="tobillo" role="radio" aria-checked="false" tabindex="-1" aria-label="tobillo"><polygon points="80.0,472.0 99.0,470.0 100.0,510.0 78.0,512.0"/><polygon points="136.0,472.0 117.0,470.0 116.0,510.0 138.0,512.0"/></g>
+<text class="silueta__cara" x="108" y="550" text-anchor="middle">Delante</text>
+<g class="silueta__cuerpo"><ellipse cx="312" cy="60" rx="25" ry="31"/></g>
+<g class="silueta__zona" data-zona="cuello" role="radio" aria-checked="false" tabindex="-1" aria-label="cuello"><polygon points="299.0,88.0 325.0,88.0 327.0,110.0 297.0,110.0"/></g>
+<g class="silueta__zona" data-zona="hombro" role="radio" aria-checked="false" tabindex="-1" aria-label="hombro"><polygon points="292.0,110.0 258.0,122.0 250.0,152.0 272.0,154.0 284.0,126.0"/><polygon points="332.0,110.0 366.0,122.0 374.0,152.0 352.0,154.0 340.0,126.0"/></g>
+<g class="silueta__zona" data-zona="espalda" role="radio" aria-checked="false" tabindex="-1" aria-label="espalda"><polygon points="292.0,112.0 332.0,112.0 352.0,154.0 348.0,248.0 276.0,248.0 272.0,154.0"/></g>
+<g class="silueta__zona" data-zona="brazo" role="radio" aria-checked="false" tabindex="-1" aria-label="brazo"><polygon points="258.0,124.0 240.0,138.0 234.0,202.0 250.0,206.0 254.0,150.0"/><polygon points="366.0,124.0 384.0,138.0 390.0,202.0 374.0,206.0 370.0,150.0"/></g>
+<g class="silueta__zona" data-zona="antebrazo" role="radio" aria-checked="false" tabindex="-1" aria-label="antebrazo"><polygon points="234.0,204.0 250.0,208.0 244.0,280.0 228.0,278.0"/><polygon points="390.0,204.0 374.0,208.0 380.0,280.0 396.0,278.0"/></g>
+<g class="silueta__zona" data-zona="mano" role="radio" aria-checked="false" tabindex="-1" aria-label="mano"><polygon points="228.0,282.0 245.0,284.0 247.0,320.0 226.0,318.0"/><polygon points="396.0,282.0 379.0,284.0 377.0,320.0 398.0,318.0"/></g>
+<g class="silueta__zona" data-zona="muslo" role="radio" aria-checked="false" tabindex="-1" aria-label="muslo"><polygon points="278.0,252.0 309.0,252.0 308.0,364.0 280.0,366.0"/><polygon points="346.0,252.0 315.0,252.0 316.0,364.0 344.0,366.0"/></g>
+<g class="silueta__zona" data-zona="gemelo" role="radio" aria-checked="false" tabindex="-1" aria-label="gemelo"><polygon points="280.0,368.0 307.0,366.0 304.0,468.0 284.0,470.0"/><polygon points="344.0,368.0 317.0,366.0 320.0,468.0 340.0,470.0"/></g>
+<g class="silueta__zona" data-zona="tobillo" role="radio" aria-checked="false" tabindex="-1" aria-label="tobillo"><polygon points="284.0,472.0 303.0,470.0 304.0,510.0 282.0,512.0"/><polygon points="340.0,472.0 321.0,470.0 320.0,510.0 342.0,512.0"/></g>
+<text class="silueta__cara" x="312" y="550" text-anchor="middle">Detras</text>
+</svg>

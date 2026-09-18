@@ -1,0 +1,493 @@
+/* =============================================================================
+   NIGREDO · SITIO
+   Barra, pie, portada, revelado de plancha y franja de edad.
+   ========================================================================== */
+
+/* --- BARRA ---------------------------------------------------------------- */
+/* Capa translucida con el contenido pasando por debajo, no una tira opaca que
+   se come una franja fija de pantalla.                                       */
+
+.nav__centinela { position: absolute; top: 0; height: 1px; width: 1px; }
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav);
+  /* La barra nace vacia en el HTML y la rellena el script. Sin reservar su
+     altura exacta crece de golpe y empuja la pagina entera: eso es un
+     desplazamiento de maquetacion real y lo paga Core Web Vitals.
+     Para que la reserva no sea una estimacion que se desajusta al cambiar la
+     tipografia, la marca lleva altura fija y la barra se calcula a partir de
+     ella. Una sola medida, dos usos.                                        */
+  min-height: calc(var(--nav-marca) + var(--s3) * 2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+  padding: var(--s3) var(--gutter);
+  transition: box-shadow var(--t-ui) ease;
+}
+/* El desenfoque va en una capa hija, no en la barra.
+   `backdrop-filter` convierte al elemento en bloque contenedor de sus
+   descendientes `position: fixed`. Puesto en la barra, el cajon del menu
+   dejaba de estar fijo al viewport: cerrado se quedaba 269 px a la derecha
+   del header y abria scroll horizontal en toda la web en movil.            */
+.nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: color-mix(in srgb, var(--ink) 74%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  transition: background-color var(--t-ui) ease;
+  pointer-events: none;
+}
+/* El filete aparece solo cuando hay contenido pasando por debajo. */
+.nav[data-flotando] {
+  box-shadow: 0 1px 0 var(--rule), 0 12px 24px -20px rgba(0, 0, 0, .9);
+}
+.nav[data-flotando]::before {
+  background: color-mix(in srgb, var(--ink) 88%, transparent);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .nav::before, .nav[data-flotando]::before {
+    background: var(--ink); backdrop-filter: none; -webkit-backdrop-filter: none;
+  }
+}
+
+.nav__marca {
+  display: grid;
+  align-content: center;
+  gap: 1px;
+  height: var(--nav-marca);
+  text-decoration: none;
+}
+.nav__nombre {
+  font-family: var(--ff-display);
+  font-optical-sizing: auto;
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+.nav__lema {
+  font-size: 0.625rem;
+  font-weight: 600;
+  font-stretch: 88%;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+.nav__lista { display: flex; align-items: center; gap: var(--s1); margin: 0; }
+
+.nav__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch);
+  padding: 0 var(--s3);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  font-stretch: 88%;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--fg-2);
+  transition: color var(--t-fast) ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .nav__link:hover { color: var(--fg); }
+}
+/* La pagina actual se marca con un filete de lacre debajo: es un estado, no
+   un adorno, y no depende solo del color porque tambien cambia el peso.      */
+.nav__link[aria-current="page"] {
+  color: var(--fg);
+  font-weight: 700;
+  box-shadow: inset 0 -2px 0 var(--lacre);
+}
+.nav__link--cita {
+  margin-left: var(--s2);
+  color: var(--paper);
+  background: var(--lacre);
+  padding-inline: var(--s4);
+}
+.nav__link--cita:focus-visible { outline-color: var(--paper); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) {
+  .nav__link--cita:hover { color: var(--paper); background: #D42234; }
+}
+.nav__link--cita[aria-current="page"] { box-shadow: none; }
+
+.nav__abrir {
+  display: none;
+  align-items: center;
+  gap: var(--s2);
+  min-height: var(--touch);
+  min-width: var(--touch);
+  padding-inline: var(--s3);
+  cursor: pointer;
+  font-size: var(--fs-label);
+  font-weight: 700;
+  font-stretch: 88%;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  color: var(--fg);
+  border: var(--hair) solid var(--rule-fn);
+}
+.nav__abrir-barras { display: grid; gap: 4px; width: 16px; }
+.nav__abrir-barras i {
+  display: block; height: 1px; background: currentColor;
+  transition: transform var(--t-ui) var(--ease-out);
+}
+[data-menu] .nav__abrir-barras i:first-child { transform: translateY(2.5px) rotate(45deg); }
+[data-menu] .nav__abrir-barras i:last-child { transform: translateY(-2.5px) rotate(-45deg); }
+
+@media (max-width: 59.999rem) {
+  .nav__abrir { display: inline-flex; }
+  .nav__menu {
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: min(20rem, 84vw);
+    padding: calc(var(--touch) + var(--s7)) var(--gutter) var(--s7);
+    background: var(--ink-field);
+    border-left: var(--hair) solid var(--rule-lit);
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform var(--t-panel) var(--ease-drawer), visibility 0s linear var(--t-panel);
+  }
+  [data-menu] .nav__menu {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform var(--t-panel) var(--ease-drawer), visibility 0s;
+  }
+  .nav__lista { flex-direction: column; align-items: stretch; gap: 0; }
+  .nav__link {
+    padding: var(--s4) 0;
+    font-size: var(--fs-sm);
+    letter-spacing: 0.1em;
+    border-bottom: var(--hair) solid var(--rule);
+  }
+  .nav__link[aria-current="page"] { box-shadow: inset 2px 0 0 var(--lacre); padding-left: var(--s3); }
+  .nav__link--cita { margin: var(--s5) 0 0; justify-content: center; padding: var(--s4); }
+}
+@media (max-width: 59.999rem) and (prefers-reduced-motion: reduce) {
+  .nav__menu { transition: opacity var(--t-ui) ease, visibility 0s linear var(--t-ui); transform: none; opacity: 0; }
+  [data-menu] .nav__menu { opacity: 1; transition: opacity var(--t-ui) ease, visibility 0s; }
+}
+
+/* --- PORTADA -------------------------------------------------------------- */
+
+.hero { padding-block: var(--s7) var(--s8); }
+@media (min-width: 60rem) { .hero { padding-block: var(--s8) var(--s9); } }
+
+.hero__titular { max-width: 14ch; }
+
+.hero__obra {
+  display: grid;
+  gap: var(--s6);
+  margin-top: var(--s7);
+}
+.hero__lamina { position: relative; min-width: 0; }
+.hero__lamina img { width: 100%; height: auto; }
+
+.hero__pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s2) var(--s4);
+  margin-top: var(--s3);
+  color: var(--fg-3);
+  font-size: var(--fs-xs);
+}
+
+.hero__acciones { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s5); }
+
+@media (min-width: 60rem) {
+  .hero__obra {
+    grid-template-columns: var(--spine) minmax(0, 25.5rem) minmax(0, 1fr);
+    column-gap: 0;
+    align-items: start;
+  }
+  .hero__intro { grid-column: 2; padding-left: var(--s6); padding-right: var(--s5); }
+  .hero__lamina {
+    grid-column: 3;
+    /* A sangre por la derecha: la obra llega al borde del viewport. */
+    margin-right: calc(50% - 50vw);
+  }
+}
+
+/* --- REVELADO DE PLANCHA --------------------------------------------------- */
+/* Se descubre de arriba abajo, como una lamina que se posa. El contenido esta
+   visible por defecto: esto solo se activa cuando hay JavaScript y el usuario
+   no ha pedido menos movimiento.                                             */
+
+[data-revelar="espera"] {
+  clip-path: inset(0 0 100% 0);
+  opacity: 0.001;
+}
+[data-revelar="hecho"] {
+  clip-path: inset(0 0 0 0);
+  opacity: 1;
+  transition: clip-path var(--t-reveal) var(--ease-out),
+              opacity 260ms var(--ease-out);
+}
+
+/* --- INDICE DEL REGISTRO --------------------------------------------------- */
+/* Filas de un indice impreso, no tres tarjetas iguales con un icono arriba.  */
+
+.indice { border-top: var(--hair) solid var(--rule); }
+
+.indice__fila {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--s3) var(--s5);
+  padding-block: var(--s5);
+  border-bottom: var(--hair) solid var(--rule);
+  text-decoration: none;
+  transition: background-color var(--t-fast) ease;
+}
+.indice__fila > * { min-width: 0; }
+@media (hover: hover) and (pointer: fine) {
+  .indice__fila:hover { background: var(--ink-field); }
+  .indice__fila:hover .indice__ir { color: var(--lacre); transform: translateX(3px); }
+}
+.indice__titulo {
+  font-family: var(--ff-display);
+  font-optical-sizing: auto;
+  font-size: var(--fs-d3);
+  line-height: 1.14;
+  letter-spacing: var(--tr-d3);
+  font-weight: 500;
+}
+.indice__texto { grid-column: 1 / -1; color: var(--fg-2); font-size: var(--fs-sm); max-width: 54ch; }
+.indice__ir {
+  font-size: var(--fs-label);
+  font-weight: 700;
+  font-stretch: 88%;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  color: var(--fg-3);
+  white-space: nowrap;
+  transition: color var(--t-fast) ease, transform var(--t-fast) var(--ease-out);
+}
+
+@media (min-width: 48rem) {
+  .indice__fila { grid-template-columns: 4.5rem minmax(0, 20rem) minmax(0, 1fr) auto; align-items: start; }
+  .indice__num { grid-row: 1; }
+  .indice__titulo { grid-row: 1; }
+  .indice__texto { grid-column: 3; grid-row: 1; }
+  .indice__ir { grid-row: 1; }
+}
+
+/* --- TIRA DE ARTISTAS ------------------------------------------------------ */
+/* Filas alternas, no una rejilla de cuatro retratos iguales. */
+
+.firma {
+  display: grid;
+  gap: var(--s4);
+  padding-block: var(--s6);
+  border-top: var(--hair) solid var(--rule);
+}
+.firma__retrato { position: relative; overflow: hidden; }
+.firma__retrato img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.06);
+  transition: filter var(--t-panel) ease, transform var(--t-panel) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .firma:hover .firma__retrato img { filter: grayscale(0.55) contrast(1.02); transform: scale(1.015); }
+}
+.firma__nombre {
+  font-family: var(--ff-display);
+  font-optical-sizing: auto;
+  font-size: var(--fs-d2);
+  line-height: 1.0;
+  letter-spacing: var(--tr-d2);
+  font-weight: 500;
+}
+.firma__meta { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); margin-top: var(--s3); }
+.firma__bio { margin-top: var(--s4); color: var(--fg-2); font-size: var(--fs-sm); max-width: 50ch; }
+
+@media (min-width: 48rem) {
+  .firma { grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); gap: var(--s6); align-items: start; }
+  .firma__retrato { aspect-ratio: 3 / 4; }
+  /* Se alternan los lados: la retícula se rompe a proposito. */
+  .firma:nth-child(even) { grid-template-columns: minmax(0, 1fr) minmax(0, 11rem); }
+  .firma:nth-child(even) .firma__retrato { order: 2; }
+}
+
+/* --- HUECOS ---------------------------------------------------------------- */
+
+.hueco {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--s3) var(--s5);
+  padding-block: var(--s4);
+  border-bottom: var(--hair) solid var(--rule);
+}
+.hueco__cuando { font-size: var(--fs-sm); }
+.hueco__cuando b { font-weight: 600; }
+.hueco__nota { grid-column: 1 / -1; color: var(--fg-3); font-size: var(--fs-xs); }
+@media (min-width: 40rem) {
+  .hueco { grid-template-columns: 12rem minmax(0, 1fr) auto; }
+  .hueco__nota { grid-column: 2; }
+}
+
+/* --- LUGAR ----------------------------------------------------------------- */
+
+.lugar__foto img { width: 100%; height: 100%; object-fit: cover; }
+@media (min-width: 48rem) {
+  .lugar { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--s6); align-items: stretch; }
+  .lugar__foto { aspect-ratio: 5 / 4; }
+}
+
+/* --- PIE ------------------------------------------------------------------- */
+
+.pie { border-top: var(--hair) solid var(--rule); padding-block: var(--s8) var(--s6); }
+.pie__cuerpo { display: grid; gap: var(--s6); }
+@media (min-width: 48rem) {
+  .pie__cuerpo { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: var(--s6); }
+}
+.pie__dir { margin-top: var(--s3); font-style: normal; line-height: 1.7; }
+.pie__horas { margin-top: var(--s3); display: grid; gap: var(--s2); }
+.pie__hora { display: flex; justify-content: space-between; gap: var(--s4); color: var(--fg-2); }
+.pie__hora dd { margin: 0; color: var(--fg-3); }
+.pie__base { margin-top: var(--s7); padding-top: var(--s4); border-top: var(--hair) solid var(--rule); }
+.pie__legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s3) var(--s5); }
+.pie__legales { display: flex; flex-wrap: wrap; gap: var(--s4); }
+.pie__legales a { color: var(--fg-3); }
+
+/* --- FRANJA DE EDAD -------------------------------------------------------- */
+
+.edad {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: var(--z-gate);
+  padding: var(--s4) var(--gutter) calc(var(--s4) + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--ink-field) 94%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: var(--hair) solid var(--rule-lit);
+  transform: translateY(100%);
+  transition: transform var(--t-panel) var(--ease-drawer);
+}
+.edad[data-visible] { transform: translateY(0); }
+
+.edad__caja {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  display: grid;
+  gap: var(--s2);
+}
+.edad__texto { max-width: 62ch; }
+.edad__botones { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s2); }
+
+@media (min-width: 60rem) {
+  .edad__caja {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--s7);
+  }
+  .edad__caja .plate-no { grid-column: 1; }
+  .edad__caja h2 { grid-column: 1; }
+  .edad__texto { grid-column: 1; }
+  .edad__botones { grid-column: 2; grid-row: 1 / -1; margin-top: 0; flex-wrap: nowrap; }
+}
+
+/* Variante modal, solo si el estudio la activa en content.js. */
+.edad--modal {
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--gutter);
+  background: color-mix(in srgb, var(--ink-deep) 88%, transparent);
+  transform: none;
+  opacity: 0;
+  transition: opacity var(--t-panel) var(--ease-out);
+}
+.edad--modal[data-visible] { opacity: 1; }
+.edad--modal .edad__caja {
+  max-width: 34rem;
+  padding: var(--s6);
+  background: var(--ink-field);
+  border: var(--hair) solid var(--rule-lit);
+  box-shadow: var(--shadow-lift);
+}
+@media (min-width: 60rem) { .edad--modal .edad__caja { grid-template-columns: minmax(0, 1fr); } }
+[data-bloqueado] { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .edad { transform: none; opacity: 0; transition: opacity var(--t-ui) ease; }
+  .edad[data-visible] { opacity: 1; }
+}
+
+/* --- TIRA DE PLANCHAS ------------------------------------------------------ */
+/* Laminas apoyadas en una mesa: alineadas por arriba, de alturas distintas
+   porque cada obra tiene su proporcion. Nada de miniaturas cuadradas.        */
+
+.tira {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s5) var(--s4);
+  align-items: start;
+  margin: 0;
+}
+@media (min-width: 60rem) {
+  .tira { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s5); }
+}
+
+.tira__enlace { display: block; text-decoration: none; }
+.tira__lamina { display: block; overflow: hidden; }
+.tira__lamina img {
+  width: 100%;
+  height: auto;
+  transition: transform var(--t-panel) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .tira__enlace:hover .tira__lamina img { transform: scale(1.02); }
+  .tira__enlace:hover .tira__titulo { color: var(--fg); }
+}
+
+.tira__pie { display: grid; gap: 2px; margin-top: var(--s3); }
+.tira__titulo {
+  font-size: var(--fs-sm);
+  color: var(--fg-2);
+  transition: color var(--t-fast) ease;
+}
+.tira__meta { font-size: var(--fs-xs); color: var(--fg-3); }
+
+/* --- FICHA DE ARTISTA ------------------------------------------------------ */
+
+.ficha { padding-block: var(--s8); border-top: var(--hair) solid var(--rule); }
+.ficha:first-of-type { border-top: 0; padding-top: var(--s6); }
+
+.ficha__cab { display: grid; gap: var(--s5); }
+.ficha__retrato { overflow: hidden; background: var(--ink-inset); }
+.ficha__retrato img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.05); }
+
+.ficha__nombre { max-width: 12ch; }
+.ficha__meta { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); margin-top: var(--s4); }
+
+.ficha__datos {
+  display: grid;
+  gap: var(--s4);
+  margin-top: var(--s6);
+  padding-top: var(--s4);
+  border-top: var(--hair) solid var(--rule);
+}
+.ficha__dato dt { font-size: var(--fs-label); font-weight: 600; font-stretch: 88%;
+  letter-spacing: var(--tr-label); text-transform: uppercase; color: var(--fg-mute); }
+.ficha__dato dd { margin: var(--s2) 0 0; font-size: var(--fs-sm); color: var(--fg-2); max-width: 46ch; }
+.ficha__dato dd.num { font-variant-numeric: tabular-nums lining-nums; }
+
+@media (min-width: 48rem) {
+  .ficha__cab { grid-template-columns: minmax(0, 17rem) minmax(0, 1fr); gap: var(--s7); align-items: start; }
+  .ficha__retrato { aspect-ratio: 3 / 4; }
+  .ficha__datos { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s5); }
+}
+
+.ficha__obra { margin-top: var(--s6); }

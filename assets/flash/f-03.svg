@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 280" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Daga corta">
+<title>Daga corta</title>
+
+  <path d="M100 18l16 44v96h-32V62z"/>
+  <path d="M100 18v140"/>
+  <path d="M62 158h76"/>
+  <path d="M62 158l-14 14M138 158l14 14"/>
+  <path d="M90 172h20v52H90z"/>
+  <path d="M90 186h20M90 200h20M90 214h20"/>
+  <path d="M100 224v14"/>
+  <circle cx="100" cy="250" r="12"/>
+  <circle cx="100" cy="250" r="5"/>
+</svg>

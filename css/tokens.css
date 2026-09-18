@@ -1,0 +1,137 @@
+/* =============================================================================
+   NIGREDO · TOKENS
+   Mundo visual: REGISTRO — atlas anatomico grabado, registro de especimenes.
+   Regla dura: el lacre solo toca lo manipulable. Nunca decora.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* --- TINTA · negro calido (R>G>B): el fondo es tinta, no "dark mode" ----- */
+  --ink:           #0B0907;   /* suelo de pagina                              */
+  --ink-field:     #12100C;   /* campo elevado: barras, paneles               */
+  --ink-inset:     #181410;   /* campo hundido: inputs, huecos                */
+  --ink-deep:      #060505;   /* pozo: bajo una plancha, dentro de un lightbox*/
+
+  /* --- PAPEL · la plancha. Aparece SOLO donde vive la obra o un dato ------- */
+  --paper:         #F4EFE6;
+  --paper-2:       #E7E0D3;
+  --paper-edge:    #CFC5B2;
+
+  /* --- TEXTO sobre tinta · toda la escalera verificada AA ------------------ */
+  --fg:            #EFE9DD;   /* 16.44:1  titulares, cuerpo principal         */
+  --fg-2:          #BEB4A4;   /*  9.71:1  cuerpo secundario                   */
+  --fg-3:          #948A7C;   /*  5.86:1  metadatos, pies                     */
+  --fg-mute:       #8A8074;   /*  5.13:1  etiquetas, bordes funcionales       */
+  --fg-off:        #5C554B;   /*  2.70:1  SOLO controles deshabilitados       */
+
+  /* --- TEXTO sobre papel --------------------------------------------------- */
+  --plate-fg:      #12100C;   /* 16.59:1 */
+  --plate-fg-2:    #4A443A;   /*  8.41:1 */
+  --plate-fg-3:    #6E6759;   /*  4.89:1 */
+
+  /* --- LACRE · un solo rojo, y tiene oficio -------------------------------- */
+  /* El lacre aparece en tres sitios y en ninguno mas:
+       1. Lo que el usuario puede manipular: boton, filtro activo, tirador,
+          zona elegida en la silueta, paso actual, pagina actual.
+       2. El indice de una medida que acaba de cambiar: la cifra viva del
+          estimador, la marca sobre una escala.
+       3. Una advertencia sanitaria. Es la unica excepcion y esta aqui escrita
+          para que se note si alguien abre una cuarta.
+     Nunca en un fondo, un filete de separacion, un icono ni un titular.
+
+     3.38:1 sobre tinta  -> pasa 1.4.11 (UI) y texto grande. NUNCA texto chico.
+     5.13:1 bajo papel   -> cuando debe llevar texto, se vuelve bloque lleno.  */
+  --lacre:         #C41E30;
+  --lacre-deep:    #8E1522;   /* presionado / borde inferior del bloque       */
+  --lacre-wash:    rgba(196, 30, 48, 0.14);  /* velo de seleccion             */
+
+  /* --- FILETES · el grabado vive aqui, no en el ornamento ------------------ */
+  --rule:          #251E17;   /* filete decorativo, separacion de seccion     */
+  --rule-lit:      #33291F;   /* filete sobre campo elevado                   */
+  --rule-fn:       #8A8074;   /* filete FUNCIONAL (input, boton): 5.13:1      */
+
+  /* --- TIPOGRAFIA ---------------------------------------------------------- */
+  --ff-display: "Bodoni Moda", "Bodoni fallback", "Times New Roman", serif;
+  --ff-text:    "Archivo", "Archivo fallback", system-ui, sans-serif;
+
+  /* Escala fluida. Techo de display 6rem (96px): mas es cartel, no pagina.    */
+  --fs-d1:    clamp(2.75rem, 1.55rem + 6.0vw, 6rem);
+  --fs-d2:    clamp(2rem,    1.30rem + 3.5vw, 3.75rem);
+  --fs-d3:    clamp(1.5rem,  1.16rem + 1.7vw, 2.25rem);
+  --fs-d4:    clamp(1.1875rem, 1.06rem + 0.63vw, 1.5rem);
+  --fs-lead:  clamp(1.0625rem, 1.01rem + 0.28vw, 1.25rem);
+  --fs-body:  1rem;
+  --fs-sm:    0.875rem;
+  --fs-xs:    0.8125rem;
+  --fs-label: 0.6875rem;
+
+  /* Tracking por tamano (apple-design): negativo arriba, positivo abajo.
+     Suelo -0.04em. Un solo letter-spacing global siempre esta mal en algun
+     sitio de la escala.                                                       */
+  --tr-d1:    -0.035em;
+  --tr-d2:    -0.026em;
+  --tr-d3:    -0.018em;
+  --tr-d4:    -0.012em;
+  --tr-lead:  -0.006em;
+  --tr-body:   0em;
+  --tr-sm:     0.004em;
+  --tr-label:  0.145em;   /* versalitas de ficha: abren para poder leerse     */
+
+  /* Interlineado inverso al tamano */
+  --lh-d1: 0.93;  --lh-d2: 1.0;   --lh-d3: 1.12;  --lh-d4: 1.22;
+  --lh-lead: 1.5; --lh-body: 1.62; --lh-sm: 1.55;  --lh-label: 1.1;
+
+  --measure:     66ch;   /* medida de lectura                                 */
+  --measure-tight: 46ch; /* entradillas y pies                                */
+
+  /* --- ESPACIO · un solo ritmo en toda la web ------------------------------ */
+  --s1: 0.25rem;  --s2: 0.5rem;   --s3: 0.75rem;  --s4: 1rem;
+  --s5: 1.5rem;   --s6: 2rem;     --s7: 3rem;     --s8: 4rem;
+  --s9: 6rem;     --s10: 8rem;    --s11: 12rem;
+
+  /* --- RETICULA ------------------------------------------------------------ */
+  --gutter:  clamp(1rem, 1.2rem + 1.6vw, 2.75rem);
+  --spine:   0rem;              /* columna de margen: numeros de plancha      */
+  --maxw:    86rem;
+  --touch:   44px;              /* area tactil minima                         */
+  --nav-marca: 2.95rem;         /* alto fijo de la marca; de aqui sale el de
+                                   la barra, que el script rellena tarde     */
+
+  /* --- SUPERFICIE ---------------------------------------------------------- */
+  --r: 0;                        /* el registro se imprime en papel cortado a
+                                    escuadra. Cero radio en toda la web.      */
+  --hair: 1px;
+  /* Sombra SOLO en lo que fisicamente esta encima: la plancha de papel.
+     Con desplazamiento y desenfoque reales; nada de halos sin offset.        */
+  --shadow-plate: 0 1px 2px rgba(0,0,0,.55), 0 10px 28px -8px rgba(0,0,0,.66);
+  --shadow-lift:  0 2px 5px rgba(0,0,0,.6),  0 26px 56px -16px rgba(0,0,0,.76);
+
+  --grain-opacity: 0.042;
+
+  /* --- MOTION -------------------------------------------------------------- */
+  /* Curvas fuertes: las integradas de CSS no tienen punch suficiente.         */
+  --ease-out:    cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --t-press:  120ms;   /* respuesta al pulsar                                 */
+  --t-fast:   160ms;   /* hover, color                                        */
+  --t-ui:     200ms;   /* desplegables, filtros                               */
+  --t-panel:  280ms;   /* paneles, cajones                                    */
+  --t-reveal: 520ms;   /* revelado de imagen: material, no UI                 */
+
+  /* --- CAPAS --------------------------------------------------------------- */
+  --z-grain: 1;  --z-sticky: 20;  --z-nav: 40;
+  --z-panel: 60; --z-lightbox: 80; --z-gate: 90;
+}
+
+/* El grano es caro si se hace mal: nada de feTurbulence a pantalla completa.
+   Tesela de 128px pre-horneada, en un pseudo-elemento fijo que no repinta.    */
+@media (prefers-reduced-transparency: reduce) {
+  :root { --grain-opacity: 0; }
+}
+
+@media (min-width: 60rem) {
+  :root { --spine: 9.5rem; }
+}

@@ -1,0 +1,244 @@
+/* =============================================================================
+   NIGREDO · BASE
+   Reset + las superficies que dibuja el navegador y casi nadie viste:
+   seleccion, cursor, barra de scroll, anillo de foco, subrayado, vinetas.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Bodoni Moda";
+  src: url("../assets/fonts/bodoni-moda-var.woff2") format("woff2-variations");
+  font-weight: 400 900;
+  font-stretch: 100%;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+2010-2044, U+20AC,
+                 U+2116, U+2122, U+2190-2193, U+2212, U+2248;
+}
+
+@font-face {
+  font-family: "Archivo";
+  src: url("../assets/fonts/archivo-var.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+2010-2044, U+20AC,
+                 U+2116, U+2122, U+2190-2193, U+2212, U+2248;
+}
+
+
+/* --- FALLBACK CON LAS MISMAS METRICAS ---------------------------------------
+   `font-display: swap` pinta primero con la fuente del sistema y cambia cuando
+   llega la real. Si las dos ocupan distinto, el texto entero se recoloca: en
+   una conexion lenta eso da un CLS de 1,0, que es la peor nota posible en una
+   metrica que Google usa para posicionar.
+
+   Estas dos caras no descargan nada: son Times y Arial con las metricas
+   reescaladas para ocupar exactamente lo mismo que Bodoni y Archivo. El
+   intercambio deja de mover nada. Los porcentajes salen de comparar las tablas
+   de las fuentes, no a ojo: los recalcula tools/metricas-fallback.py.
+   -------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Bodoni fallback";
+  src: local("Times New Roman"), local("Times"), local("Liberation Serif"), local("Tinos");
+  size-adjust: 115.95%;
+  ascent-override: 97.02%;
+  descent-override: 34.50%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Archivo fallback";
+  src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans"), local("Arimo");
+  size-adjust: 97.59%;
+  ascent-override: 89.97%;
+  descent-override: 21.52%;
+  line-gap-override: 0%;
+}
+
+/* --- RESET ---------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+* { margin: 0; }
+
+/* El `display:none` del atributo [hidden] lo pone la hoja del navegador, con
+   la especificidad mas baja que existe: cualquier `display` de autor lo pisa
+   y el elemento sigue a la vista. Pasa siempre con botones y flex. */
+[hidden] { display: none !important; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-gutter: stable;
+  /* Sin scroll-behavior: smooth global. Un salto de ancla debe ser inmediato;
+     el scroll suave secuestra el control del usuario.                        */
+}
+
+body {
+  min-height: 100svh;
+  background-color: var(--ink);
+  color: var(--fg);
+  font-family: var(--ff-text);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: var(--lh-body);
+  letter-spacing: var(--tr-body);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+img, picture, svg, video, canvas {
+  display: block;
+  max-width: 100%;
+}
+
+img { height: auto; }
+
+input, button, textarea, select {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+button { background: none; border: 0; padding: 0; }
+
+p, h1, h2, h3, h4, li, figcaption, dd, dt { overflow-wrap: break-word; }
+
+ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
+
+:where(h1, h2, h3, h4) { text-wrap: balance; }
+:where(p, li, figcaption) { text-wrap: pretty; }
+
+/* --- SUPERFICIES DEL NAVEGADOR -------------------------------------------- */
+/* Todo lo de aqui abajo trae un valor por defecto que no pertenece a ningun
+   sistema de diseno. Vestirlas es lo que separa una pagina construida de una
+   pagina ensamblada.                                                         */
+
+::selection {
+  background-color: var(--lacre);
+  color: var(--paper);
+  text-shadow: none;
+}
+
+:root {
+  accent-color: var(--lacre);
+  caret-color: var(--lacre);
+  scrollbar-color: var(--rule-lit) var(--ink);
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb {
+  background: var(--rule-lit);
+  border: 3px solid var(--ink);   /* filete de aire: el pulgar queda fino     */
+}
+::-webkit-scrollbar-thumb:hover { background: var(--fg-off); }
+::-webkit-scrollbar-corner { background: var(--ink); }
+
+::placeholder { color: var(--fg-mute); opacity: 1; }
+
+::marker { color: var(--lacre); }
+
+:where(button, a, input, select, summary, [tabindex]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* El anillo de foco es una marca de registro: dos filetes de lacre a escuadra.
+   3.38:1 sobre tinta -> cumple 1.4.11. Sobre lacre, se invierte a papel.     */
+:focus-visible {
+  outline: 2px solid var(--lacre);
+  outline-offset: 3px;
+}
+.on-lacre :focus-visible,
+:focus-visible.on-lacre { outline-color: var(--paper); }
+
+/* Sin :focus sin -visible: el raton no debe dejar anillos por la pagina.     */
+:focus:not(:focus-visible) { outline: none; }
+
+a {
+  color: inherit;
+  text-decoration-color: color-mix(in srgb, currentColor 38%, transparent);
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color var(--t-fast) ease,
+              color var(--t-fast) ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  a:hover { text-decoration-color: var(--lacre); }
+}
+
+/* --- GRANO ---------------------------------------------------------------- */
+/* Tesela de 128px en un pseudo-elemento fijo. No repinta al hacer scroll y no
+   intercepta el puntero. Nada de filtros SVG a pantalla completa.            */
+body::after {
+  content: "";
+  position: fixed;
+  /* `inset: 0` basta en un elemento fijo, y sin `will-change`: promocionarlo
+     a capa propia teniendo mix-blend-mode obliga a recomponer el viewport
+     entero en cada repintado, y Chrome contabiliza eso como desplazamiento.  */
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  /* GRANO:INICIO */
+  background-image: url("data:image/webp;base64,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");
+  /* GRANO:FIN */
+  background-repeat: repeat;
+  background-size: 128px 128px;
+  mix-blend-mode: overlay;
+  opacity: var(--grain-opacity);
+}
+
+/* --- SALTO AL CONTENIDO ---------------------------------------------------- */
+
+.skip {
+  position: absolute;
+  left: var(--gutter);
+  top: 0;
+  z-index: 100;
+  transform: translateY(-140%);
+  background: var(--lacre);
+  color: var(--paper);
+  padding: var(--s3) var(--s5);
+  font-size: var(--fs-label);
+  font-stretch: 88%;
+  font-weight: 600;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform var(--t-ui) var(--ease-out);
+}
+.skip:focus-visible { transform: translateY(0); outline-color: var(--paper); }
+
+.visually-hidden:not(:focus):not(:active) {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* --- MOVIMIENTO REDUCIDO --------------------------------------------------- */
+/* En serio: no basta con desactivar dos cosas. Se cortan los desplazamientos,
+   los revelados y los resortes; se conservan opacidad y color, que ayudan a
+   entender lo que pasa. Cada modulo de js consulta la misma media query.     */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Se devuelven los cambios que si comunican, ya sin desplazamiento. */
+  a, button, .btn, [data-state] {
+    transition-property: color, background-color, border-color,
+                         text-decoration-color, opacity !important;
+    transition-duration: 140ms !important;
+  }
+  .reveal { opacity: 1 !important; transform: none !important; clip-path: none !important; }
+}

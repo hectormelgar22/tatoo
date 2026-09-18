@@ -1,0 +1,263 @@
+/* =============================================================================
+   NIGREDO · REGISTRO
+   Filtros combinables, retícula de mampostería posicionada con transform,
+   visor y hoja de flash.
+   ========================================================================== */
+
+/* --- FILTROS --------------------------------------------------------------- */
+
+.filtros { display: grid; gap: var(--s5); }
+
+.filtros__grupo { display: grid; gap: var(--s3); }
+.filtros__chips { display: flex; flex-wrap: wrap; gap: var(--s2); }
+
+/* Sin resultados posibles: se deja ver, pero no se puede pulsar. Ocultarlo
+   haria saltar la fila entera cada vez que cambia otro filtro.               */
+.chip[data-sin-obra] { color: var(--fg-off); border-color: var(--rule); cursor: not-allowed; }
+.chip[data-sin-obra]:active { transform: none; }
+
+.filtros__pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3) var(--s5);
+  padding-top: var(--s4);
+  border-top: var(--hair) solid var(--rule);
+}
+.filtros__cuenta { font-size: var(--fs-sm); color: var(--fg-3); }
+.filtros__cuenta b { color: var(--fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* --- MAMPOSTERIA ----------------------------------------------------------- */
+/* Posicionada con JavaScript en vez de con columnas CSS: `columns` reordena el
+   contenido visualmente pero no en el DOM, asi que el tabulador salta en
+   zigzag y el FLIP se vuelve imposible. Aqui el orden del DOM y el orden de
+   lectura siguen siendo el mismo.                                            */
+
+.masonry {
+  position: relative;
+  width: 100%;
+  /* La altura la fija el script en cuanto corre; esto es solo la reserva del
+     primer pintado, y con el registro lleno siempre se queda corta antes que
+     larga. Sin transicion: animar `height` provoca recalculo de layout en
+     cada fotograma. Lo que se ve moverse son las planchas, por transform.    */
+  min-height: 170vh;
+}
+
+.plancha {
+  position: absolute;
+  top: 0; left: 0;
+  will-change: transform;
+}
+/* Hasta que el script coloca la retícula, las planchas fluyen en columna.
+   Si nacieran ya superpuestas en top:0, el navegador las vería todas dentro
+   de la pantalla y descargaría las doce fotos de golpe: `loading="lazy"` no
+   puede decidir nada sobre elementos que cree visibles. Así, además, la
+   página se lee entera sin JavaScript.                                      */
+.masonry:not([data-colocada]) { min-height: 0; }
+.masonry:not([data-colocada]) .plancha {
+  position: static;
+  margin-bottom: var(--s4);
+}
+/* El movimiento se activa desde el script solo cuando toca: asi la primera
+   colocacion no se anima y no hay baile al cargar.                           */
+.masonry[data-animar] .plancha {
+  transition: transform 340ms var(--ease-in-out),
+              opacity 200ms var(--ease-out);
+}
+.plancha[data-oculta] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.plancha__boton {
+  display: block;
+  width: 100%;
+  text-align: left;
+  cursor: zoom-in;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+.plancha__lamina { display: block; overflow: hidden; background: var(--ink-inset); }
+.plancha__lamina img {
+  width: 100%; height: auto; display: block;
+  transition: transform var(--t-panel) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .plancha__boton:hover .plancha__lamina img { transform: scale(1.025); }
+  .plancha__boton:hover .plancha__titulo { color: var(--fg); }
+}
+
+.plancha__pie {
+  display: grid;
+  gap: 2px;
+  padding-top: var(--s3);
+}
+.plancha__titulo {
+  font-size: var(--fs-sm);
+  color: var(--fg-2);
+  transition: color var(--t-fast) ease;
+}
+.plancha__meta { font-size: var(--fs-xs); color: var(--fg-3); }
+
+/* --- VISOR ----------------------------------------------------------------- */
+/* <dialog> nativo: trae la trampa de foco, el cierre con Escape y el fondo
+   sin que haya que reimplementarlos mal.                                     */
+
+.visor {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--ink-deep);
+  color: var(--fg);
+  overflow: hidden;
+}
+.visor::backdrop { background: rgba(6, 5, 5, .94); }
+
+.visor__caja {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100%;
+  padding: var(--s3) var(--gutter) var(--s4);
+  gap: var(--s3);
+}
+
+.visor__barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+}
+.visor__pos { font-size: var(--fs-label); letter-spacing: var(--tr-label); color: var(--fg-3); font-variant-numeric: tabular-nums; }
+
+.visor__escena {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  touch-action: pan-y;
+}
+/* Tanto la caja como la imagen se dimensionan por `inset`, no por porcentajes.
+   Un `height: 100%` dentro de una fila de rejilla de tamano automatico se
+   trata como indefinido y el navegador lo ignora: la imagen se sale de la
+   pantalla. Con inset la altura sale de la caja de la escena, que si es
+   definida, y `object-fit: contain` encaja la obra dentro sin recortarla.    */
+.visor__lamina {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+.visor__lamina img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.visor__nav {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  width: var(--touch);
+  height: calc(var(--touch) * 1.6);
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--ink) 62%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: var(--hair) solid var(--rule-lit);
+  cursor: pointer;
+  z-index: 1;
+  transition: border-color var(--t-fast) ease, background-color var(--t-fast) ease,
+              transform var(--t-press) var(--ease-out);
+}
+.visor__nav:active { transform: translateY(-50%) scale(0.95); }
+.visor__nav[data-prev] { left: 0; }
+.visor__nav[data-next] { right: 0; }
+.visor__nav:disabled { opacity: .3; cursor: default; }
+@media (hover: hover) and (pointer: fine) {
+  .visor__nav:not(:disabled):hover { border-color: var(--lacre); background: color-mix(in srgb, var(--ink) 80%, transparent); }
+}
+/* Punta dibujada con dos trazos, no un glifo unicode haciendo de icono. */
+.visor__nav i {
+  width: 11px; height: 11px;
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+}
+.visor__nav[data-prev] i { rotate: 45deg; translate: 2px 0; }
+.visor__nav[data-next] i { rotate: -135deg; translate: -2px 0; }
+
+.visor__ficha {
+  display: grid;
+  gap: var(--s2);
+  padding-top: var(--s3);
+  border-top: var(--hair) solid var(--rule);
+}
+.visor__titulo { font-family: var(--ff-display); font-optical-sizing: auto; font-size: var(--fs-d4); line-height: 1.2; }
+.visor__datos { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); }
+.visor__pista { font-size: var(--fs-xs); color: var(--fg-3); }
+
+@media (min-width: 60rem) {
+  .visor__ficha { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+  .visor__datos { justify-content: flex-end; }
+}
+
+/* --- HOJA DE FLASH ---------------------------------------------------------- */
+
+.hoja {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+  gap: var(--s5) var(--s4);
+  margin: 0;
+}
+
+.flash { display: grid; gap: var(--s3); }
+
+.flash__lamina {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 200 / 260;
+  padding: var(--s5);
+  background: var(--paper);
+  color: var(--plate-fg);
+  box-shadow: var(--shadow-plate);
+  transition: transform var(--t-panel) var(--ease-out),
+              box-shadow var(--t-panel) ease;
+}
+.flash__lamina svg { width: 100%; height: 100%; }
+
+/* Reservado: banda de cinta cruzando la esquina. Marca fisica, no un color. */
+.flash[data-estado="reservado"] .flash__lamina { opacity: .62; }
+.flash[data-estado="reservado"] .flash__lamina::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg, transparent 0 13px, color-mix(in srgb, var(--plate-fg) 16%, transparent) 13px 15px);
+}
+/* Tatuado: esquina troquelada, la misma del sistema. */
+.flash[data-estado="tatuado"] .flash__lamina {
+  opacity: .5;
+  clip-path: polygon(0 0, calc(100% - 1.6rem) 0, 100% 1.6rem, 100% 100%, 0 100%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .flash[data-estado="libre"]:hover .flash__lamina {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lift);
+  }
+}
+
+.flash__ficha { display: grid; gap: var(--s2); }
+.flash__cab { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); }
+.flash__titulo { font-size: var(--fs-sm); color: var(--fg); }
+.flash__precio { font-size: var(--fs-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
+.flash__meta { font-size: var(--fs-xs); color: var(--fg-3); }
+.flash__pie { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); flex-wrap: wrap; }

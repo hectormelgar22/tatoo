@@ -1,0 +1,475 @@
+/* =============================================================================
+   NIGREDO · HERRAMIENTAS
+   Linea de cuidados, estimador, mapa corporal, simulador y formulario.
+   ========================================================================== */
+
+/* --- LINEA DE CUIDADOS ----------------------------------------------------- */
+/* Una escala graduada con marcas de indice, como la del pliego de muestra: la
+   misma gramatica para medir tiempo que para medir duracion.                 */
+
+.linea { position: relative; }
+
+.linea__pista {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  border-bottom: var(--hair) solid var(--rule-lit);
+}
+.linea__pista::-webkit-scrollbar { display: none; }
+
+.linea__hito {
+  flex: 1 0 auto;
+  min-width: 7.5rem;
+  min-height: var(--touch);
+  padding: var(--s3) var(--s3) var(--s4);
+  text-align: left;
+  cursor: pointer;
+  color: var(--fg-3);
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  font-size: var(--fs-label);
+  font-weight: 600;
+  font-stretch: 88%;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color var(--t-fast) ease, border-color var(--t-fast) ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .linea__hito:hover { color: var(--fg-2); }
+}
+.linea__hito[aria-selected="true"] {
+  color: var(--fg);
+  font-weight: 700;
+  border-bottom-color: var(--lacre);
+}
+.linea__hito:focus-visible { outline-offset: -3px; }
+
+.fase { padding-top: var(--s6); }
+.fase__resumen {
+  font-family: var(--ff-display);
+  font-optical-sizing: auto;
+  font-size: var(--fs-d3);
+  line-height: 1.16;
+  letter-spacing: var(--tr-d3);
+  max-width: 22ch;
+}
+.fase__cols { display: grid; gap: var(--s6); margin-top: var(--s6); }
+@media (min-width: 48rem) {
+  .fase__cols { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+}
+
+.lista { display: grid; gap: var(--s3); margin-top: var(--s4); }
+.lista li {
+  display: grid;
+  grid-template-columns: 0.9rem minmax(0, 1fr);
+  gap: var(--s3);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--fg-2);
+}
+/* Hacer / evitar / alarma se distinguen por la marca, no por el color: asi se
+   leen en escala de grises y con daltonismo.                                 */
+.lista li::before { content: ""; width: 0.7rem; height: 0.7rem; margin-top: 0.36em; }
+.lista--hacer  li::before { background: var(--fg-mute); }
+.lista--evitar li::before {
+  border: 1px solid var(--fg-mute);
+  background: linear-gradient(-45deg, transparent 44%, var(--fg-mute) 44% 56%, transparent 56%);
+}
+.lista--alarma li::before { background: var(--lacre); }
+.lista--alarma li { color: var(--fg); }
+
+/* --- ALARMA ---------------------------------------------------------------- */
+
+.alarma {
+  margin-top: var(--s7);
+  padding: var(--s5);
+  border: var(--hair) solid var(--lacre);
+  background: var(--lacre-wash);
+}
+.alarma__titulo { font-family: var(--ff-display); font-optical-sizing: auto;
+  font-size: var(--fs-d4); line-height: 1.2; }
+.alarma p { margin-top: var(--s3); font-size: var(--fs-sm); color: var(--fg); max-width: 56ch; }
+
+/* --- RECORDATORIOS --------------------------------------------------------- */
+
+.recordar { display: grid; gap: var(--s4); margin-top: var(--s7);
+  padding-top: var(--s5); border-top: var(--hair) solid var(--rule); }
+.recordar__fila { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--s4); }
+.recordar__fila .field { flex: 0 1 14rem; }
+
+/* --- PASOS (estimador y solicitud) ------------------------------------------ */
+
+.pasos__barra {
+  display: flex;
+  gap: var(--s1);
+  margin-bottom: var(--s6);
+  padding-bottom: var(--s3);
+  border-bottom: var(--hair) solid var(--rule);
+}
+.pasos__marca {
+  flex: 1;
+  height: 3px;
+  background: var(--rule-lit);
+  transition: background-color var(--t-ui) ease;
+}
+.pasos__marca[data-hecho] { background: var(--lacre); }
+.pasos__marca[data-actual] { background: var(--lacre); }
+
+.pasos__cuenta {
+  font-size: var(--fs-label);
+  font-weight: 600;
+  font-stretch: 88%;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  color: var(--fg-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.paso { display: grid; gap: var(--s5); }
+.paso__pregunta { font-family: var(--ff-display); font-optical-sizing: auto;
+  font-size: var(--fs-d3); line-height: 1.14; letter-spacing: var(--tr-d3); max-width: 20ch; }
+.paso__ayuda { font-size: var(--fs-sm); color: var(--fg-3); max-width: 52ch; margin-top: calc(var(--s3) * -1); }
+
+.pasos__pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3) var(--s5);
+  margin-top: var(--s7);
+  padding-top: var(--s4);
+  border-top: var(--hair) solid var(--rule);
+}
+.pasos__nav { display: flex; gap: var(--s3); }
+
+/* --- OPCIONES -------------------------------------------------------------- */
+/* Radios y casillas de verdad debajo: el teclado y el lector de pantalla los
+   entienden solos. Lo que se dibuja es la etiqueta.                          */
+
+.ops { display: grid; gap: var(--s2); }
+@media (min-width: 34rem) {
+  .ops--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ops--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.op { position: relative; display: block; }
+.op input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%; height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+.op__caja {
+  display: grid;
+  gap: var(--s1);
+  min-height: var(--touch);
+  padding: var(--s3) var(--s4);
+  border: var(--hair) solid var(--rule-fn);
+  transition: border-color var(--t-fast) ease, background-color var(--t-fast) ease;
+}
+.op__t { font-size: var(--fs-sm); color: var(--fg); }
+.op__d { font-size: var(--fs-xs); color: var(--fg-3); }
+.op__d.num { font-variant-numeric: tabular-nums lining-nums; }
+
+@media (hover: hover) and (pointer: fine) {
+  .op:hover .op__caja { border-color: var(--fg-mute); }
+}
+.op input:checked + .op__caja {
+  border-color: var(--lacre);
+  background: var(--lacre-wash);
+}
+.op input:checked + .op__caja .op__t { font-weight: 600; }
+.op input:focus-visible + .op__caja { outline: 2px solid var(--lacre); outline-offset: 3px; }
+
+/* Referencia visual de tamano: una barra a escala real junto a cada opcion. */
+.op__escala { height: 3px; background: var(--fg-mute); margin-top: var(--s2); }
+
+/* --- MAPA CORPORAL --------------------------------------------------------- */
+
+.silueta-caja {
+  display: grid;
+  gap: var(--s5);
+  align-items: start;
+}
+@media (min-width: 48rem) {
+  .silueta-caja { grid-template-columns: minmax(0, 1fr) minmax(0, 15rem); gap: var(--s6); }
+}
+
+.silueta { width: 100%; height: auto; max-width: 30rem; }
+.silueta__cuerpo { fill: none; stroke: var(--rule-lit); stroke-width: 1.5; }
+.silueta__cara {
+  fill: var(--fg-3);
+  font-family: var(--ff-text);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.silueta__zona polygon {
+  fill: var(--ink-inset);
+  stroke: var(--rule-fn);
+  stroke-width: 1.2;
+  cursor: pointer;
+  transition: fill var(--t-fast) ease, stroke var(--t-fast) ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .silueta__zona:hover polygon { fill: var(--ink-field); stroke: var(--fg-mute); }
+}
+.silueta__zona[aria-checked="true"] polygon { fill: var(--lacre); stroke: var(--lacre); }
+.silueta__zona:focus { outline: none; }
+.silueta__zona:focus-visible polygon { stroke: var(--paper); stroke-width: 2.4; }
+
+.silueta__leyenda { display: grid; gap: var(--s3); }
+.silueta__elegida { font-size: var(--fs-sm); color: var(--fg-2); }
+.silueta__elegida b { color: var(--fg); font-weight: 600; }
+
+/* Dolor: escala de cinco marcas, no cinco iconos de fuego. */
+.dolor { display: flex; align-items: center; gap: var(--s2); }
+.dolor__marcas { display: flex; gap: 3px; }
+.dolor__marcas i { width: 14px; height: 4px; background: var(--rule-lit); }
+.dolor__marcas i[data-on] { background: var(--lacre); }
+
+/* --- SALIDA DEL ESTIMADOR --------------------------------------------------- */
+
+.salida { padding: var(--s6); background: var(--paper); color: var(--plate-fg);
+  box-shadow: var(--shadow-plate); }
+.salida__cifra {
+  font-family: var(--ff-display);
+  font-optical-sizing: auto;
+  font-size: clamp(2.25rem, 1.4rem + 3.6vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.028em;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--lacre);
+}
+.salida__reparto { display: grid; gap: var(--s3); margin-top: var(--s5);
+  padding-top: var(--s4); border-top: var(--hair) solid var(--paper-edge); }
+.salida__fila { display: flex; justify-content: space-between; gap: var(--s4);
+  font-size: var(--fs-sm); font-variant-numeric: tabular-nums lining-nums; }
+.salida__fila dt { color: var(--plate-fg-2); }
+.salida__fila dd { margin: 0; font-weight: 600; }
+.salida__aviso { margin-top: var(--s5); font-size: var(--fs-xs); line-height: 1.5;
+  color: var(--plate-fg-3); max-width: 46ch; }
+
+/* --- SIMULADOR -------------------------------------------------------------- */
+
+.sim { display: grid; gap: var(--s5); }
+@media (min-width: 56rem) {
+  .sim { grid-template-columns: minmax(0, 1fr) minmax(0, 17rem); gap: var(--s6); align-items: start; }
+}
+
+.sim__escena {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--ink-inset);
+  border: var(--hair) solid var(--rule-lit);
+  touch-action: none;
+  display: grid;
+  place-items: center;
+}
+.sim__escena img.sim__foto { width: 100%; height: 100%; object-fit: cover; }
+
+.sim__pieza {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 34%;
+  cursor: grab;
+  will-change: transform;
+}
+.sim__pieza:active { cursor: grabbing; }
+.sim__pieza svg { width: 100%; height: auto; display: block; }
+
+.sim__vacio {
+  display: grid;
+  gap: var(--s4);
+  justify-items: center;
+  text-align: center;
+  padding: var(--s6);
+  color: var(--fg-3);
+}
+.sim__mandos { display: grid; gap: var(--s5); }
+.sim__mando { display: grid; gap: var(--s2); }
+.sim__mando label { font-size: var(--fs-label); font-weight: 600; font-stretch: 88%;
+  letter-spacing: var(--tr-label); text-transform: uppercase; color: var(--fg-mute); }
+.sim__mando .val { color: var(--fg-2); font-variant-numeric: tabular-nums; }
+.sim__fila { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); }
+
+input[type="range"] {
+  width: 100%;
+  height: var(--touch);
+  background: none;
+  appearance: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 2px; background: var(--rule-fn);
+}
+input[type="range"]::-moz-range-track { height: 2px; background: var(--rule-fn); }
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px; height: 18px;
+  margin-top: -8px;
+  background: var(--lacre);
+  border: 0;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px; height: 18px; border: 0; border-radius: 0; background: var(--lacre);
+}
+
+.sim__flashes { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s2); }
+.sim__flash {
+  aspect-ratio: 1;
+  display: grid; place-items: center;
+  padding: var(--s2);
+  background: var(--ink-inset);
+  border: var(--hair) solid var(--rule-lit);
+  cursor: pointer;
+  color: var(--fg-2);
+  transition: border-color var(--t-fast) ease, color var(--t-fast) ease,
+              transform var(--t-press) var(--ease-out);
+}
+.sim__flash:active { transform: scale(0.95); }
+.sim__flash svg { width: 100%; height: 100%; }
+.sim__flash[aria-pressed="true"] { border-color: var(--lacre); color: var(--fg); }
+@media (hover: hover) and (pointer: fine) {
+  .sim__flash:hover { border-color: var(--fg-mute); color: var(--fg); }
+}
+
+.sim__privacidad {
+  display: flex; gap: var(--s3);
+  padding: var(--s4);
+  border: var(--hair) dashed var(--rule-lit);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+  color: var(--fg-2);
+}
+.sim__privacidad::before {
+  content: ""; flex: none; width: 0.7rem; height: 0.7rem;
+  margin-top: 0.3em; background: var(--fg-mute);
+}
+
+/* --- REFERENCIAS (arrastrables) --------------------------------------------- */
+
+.refs { display: grid; grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  gap: var(--s3); margin-top: var(--s4); }
+.ref {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--ink-inset);
+  border: var(--hair) solid var(--rule-lit);
+  cursor: grab;
+}
+.ref[data-arrastrando] { opacity: .4; cursor: grabbing; }
+.ref[data-encima] { border-color: var(--lacre); }
+.ref img { width: 100%; height: 100%; object-fit: cover; }
+.ref__orden {
+  position: absolute; top: 0; left: 0;
+  padding: 2px 6px;
+  background: var(--lacre);
+  color: var(--paper);
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ref__quitar {
+  position: absolute; top: 0; right: 0;
+  width: 28px; height: 28px;
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--ink) 78%, transparent);
+  color: var(--fg);
+  cursor: pointer;
+}
+.ref__quitar::before, .ref__quitar::after {
+  content: ""; position: absolute; width: 11px; height: 1.5px; background: currentColor;
+}
+.ref__quitar::before { rotate: 45deg; }
+.ref__quitar::after { rotate: -45deg; }
+
+.soltar {
+  display: grid; place-items: center; gap: var(--s3);
+  padding: var(--s6);
+  border: var(--hair) dashed var(--rule-fn);
+  text-align: center;
+  color: var(--fg-3);
+  font-size: var(--fs-sm);
+  transition: border-color var(--t-fast) ease, background-color var(--t-fast) ease;
+}
+.soltar[data-encima] { border-color: var(--lacre); background: var(--lacre-wash); color: var(--fg); }
+
+/* --- RESUMEN FINAL ---------------------------------------------------------- */
+
+.resumen { display: grid; gap: var(--s3); margin-top: var(--s5);
+  padding-top: var(--s4); border-top: var(--hair) solid var(--rule); }
+.resumen__fila { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr);
+  gap: var(--s4); font-size: var(--fs-sm); align-items: baseline; }
+.resumen__fila dt { font-size: var(--fs-label); font-weight: 600; font-stretch: 88%;
+  letter-spacing: var(--tr-label); text-transform: uppercase; color: var(--fg-mute); }
+.resumen__fila dd { margin: 0; color: var(--fg); }
+
+/* --- CASILLA DE CONSENTIMIENTO ---------------------------------------------- */
+
+.consiente { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s3);
+  align-items: start; padding: var(--s4); border: var(--hair) solid var(--rule-fn); }
+.consiente input { width: 20px; height: 20px; margin: 2px 0 0; flex: none; }
+.consiente span { font-size: var(--fs-sm); line-height: 1.5; color: var(--fg-2); }
+.consiente[data-invalid] { border-color: var(--lacre); background: var(--lacre-wash); }
+
+/* --- SUPERFICIES DEL NAVEGADOR EN FORMULARIOS -------------------------------- */
+/* El boton del selector de archivo y el icono del calendario los dibuja el
+   navegador con su propio estilo: gris de sistema, esquinas redondeadas y
+   ningun parentesco con esta web. Si no se visten, son lo primero que canta.  */
+
+.input[type="file"] {
+  padding: 0;
+  align-items: center;
+  display: flex;
+  font-size: var(--fs-sm);
+  color: var(--fg-2);
+}
+/* El navegador escribe "Ningun archivo seleccionado" al lado del boton y no
+   deja darle formato: en una columna estrecha se parte en un "Nin...nado" que
+   parece un error. Se oculta ese texto y el estado lo cuenta la propia
+   herramienta, que ademas ensena la foto en el lienzo.                       */
+.input[type="file"] { color: transparent; }
+
+.input[type="file"]::file-selector-button {
+  margin-right: var(--s4);
+  padding: 0 var(--s4);
+  height: calc(var(--touch) - 2px);
+  background: var(--ink-field);
+  color: var(--fg);
+  border: 0;
+  border-right: var(--hair) solid var(--rule-fn);
+  border-radius: 0;
+  cursor: pointer;
+  font-family: var(--ff-text);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  font-stretch: 88%;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  transition: background-color var(--t-fast) ease, color var(--t-fast) ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .input[type="file"]::file-selector-button:hover { background: var(--lacre); color: var(--paper); }
+}
+
+/* El icono del calendario viene negro sobre negro y no se ve. */
+.input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: .55;
+  cursor: pointer;
+}
+.input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+
+/* La plancha de la horquilla se ajusta a su contenido: estirarla hasta el alto
+   de la columna deja medio folio en blanco mirando al usuario.               */
+.salida { align-self: start; }

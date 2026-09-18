@@ -1,0 +1,11 @@
+# Los archivos de texto se guardan y se sacan con finales de linea LF.
+# Sin esto, Git los convierte a CRLF en Windows, las herramientas de tools/
+# los reescriben con LF y cada ejecucion aparece como si hubiera cambiado
+# el archivo entero. Ademas, en Vercel se sirven desde Linux.
+* text=auto eol=lf
+
+*.webp  binary
+*.png   binary
+*.jpg   binary
+*.ico   binary
+*.woff2 binary

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 280" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Luna en cuarto">
+<title>Luna en cuarto</title>
+
+  <path d="M132 34a108 108 0 100 212 92 92 0 010-212z"/>
+  <path d="M132 58a84 84 0 100 164"/>
+  <circle cx="84" cy="106" r="10"/>
+  <circle cx="68" cy="160" r="6"/>
+  <circle cx="94" cy="196" r="8"/>
+  <path d="M158 62l6-14M170 92l16-6M170 188l16 6M158 218l6 14"/>
+</svg>

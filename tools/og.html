@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>og</title>
+<!--
+  Plantilla de la imagen de Open Graph. Se captura a 1200x630 y se guarda en
+  assets/img/og.png con:  python tools/make-og.py
+
+  Se monta con el HTML y las fuentes de la propia web en vez de dibujarla en
+  un editor: así la tarjeta que sale en WhatsApp usa el mismo Bodoni, el mismo
+  negro cálido y el mismo lacre que el sitio. Si cambias la marca, cambia sola.
+-->
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/type.css">
+<style>
+  html, body { margin: 0; padding: 0; }
+  body { width: 1200px; height: 630px; overflow: hidden; }
+
+  .og {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    width: 1200px; height: 630px;
+    background: var(--ink);
+  }
+  .og__texto {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 58px 54px 52px 64px;
+  }
+  /* El eje, igual que en la web */
+  .og__texto::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: var(--rule-lit);
+    transform: translateX(64px);
+  }
+  .og__marca {
+    font-family: var(--ff-display);
+    font-optical-sizing: auto;
+    font-size: 96px;
+    font-weight: 600;
+    line-height: .92;
+    letter-spacing: .01em;
+    color: var(--fg);
+  }
+  .og__lema {
+    margin-top: 18px;
+    font-size: 14px;
+    font-weight: 600;
+    font-stretch: 88%;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+  }
+  .og__frase {
+    font-family: var(--ff-display);
+    font-optical-sizing: auto;
+    font-size: 30px;
+    line-height: 1.16;
+    letter-spacing: -.018em;
+    color: var(--fg-2);
+    max-width: 15ch;
+  }
+  .og__pie { display: flex; align-items: center; gap: 16px; }
+  .og__sello {
+    background: var(--lacre);
+    color: var(--paper);
+    padding: 7px 12px 6px;
+    font-size: 13px;
+    font-weight: 700;
+    font-stretch: 88%;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+  .og__dir { font-size: 15px; color: var(--fg-3); letter-spacing: .01em; }
+
+  .og__foto { position: relative; overflow: hidden; }
+  .og__foto img { width: 100%; height: 100%; object-fit: cover; }
+  /* Degradado de unión: la foto no debe cortarse a hueso contra el texto. */
+  .og__foto::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, var(--ink) 0%, transparent 34%);
+  }
+</style>
+</head>
+<body>
+  <div class="og">
+    <div class="og__texto">
+      <div>
+        <p class="og__marca">NIGREDO</p>
+        <p class="og__lema">Registro de obra en piel</p>
+      </div>
+      <p class="og__frase">Nada se forma sin deshacerse antes</p>
+      <div class="og__pie">
+        <span class="og__sello">Malasaña</span>
+        <span class="og__dir">Espíritu Santo 14 · Madrid</span>
+      </div>
+    </div>
+    <div class="og__foto">
+      <img src="../assets/img/hero-1200.webp" alt="">
+    </div>
+  </div>
+</body>
+</html>

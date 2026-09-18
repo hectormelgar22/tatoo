@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pliego de muestra · Sistema Registro · NIGREDO</title>
+<meta name="description" content="Hoja de especimen del sistema de diseno Registro: tinta, papel, lacre, escala tipografica, eje y componentes.">
+<meta name="robots" content="noindex">
+
+<link rel="preload" href="assets/fonts/bodoni-moda-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/type.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+
+<style>
+  /* Estilos propios de esta hoja de especimen. No forman parte del sistema. */
+  .spec__head { padding-block: var(--s8) var(--s7); }
+  .spec__sect { padding-block: var(--s7); border-top: var(--hair) solid var(--rule); }
+
+  .swatch {
+    display: grid;
+    grid-template-columns: 3.25rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--s4);
+    padding-block: var(--s3);
+    border-bottom: var(--hair) solid var(--rule);
+  }
+  .swatch__chip { height: 2.25rem; border: var(--hair) solid var(--rule-lit); }
+  .swatch__name { font-size: var(--fs-sm); }
+  .swatch__hex  { display: block; color: var(--fg-3); font-size: var(--fs-xs); }
+  .swatch__ratio {
+    font-size: var(--fs-xs); color: var(--fg-2); text-align: right;
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  .swatch__ratio b { display: block; color: var(--fg); font-size: var(--fs-sm); font-weight: 600; }
+
+  .scale__row { padding-block: var(--s4); border-bottom: var(--hair) solid var(--rule); }
+  .scale__meta {
+    display: flex; flex-wrap: wrap; gap: var(--s4);
+    margin-top: var(--s2); color: var(--fg-3); font-size: var(--fs-xs);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  .scale__meta span { white-space: nowrap; }
+
+  .demo { display: flex; flex-wrap: wrap; gap: var(--s3); align-items: center; }
+  .demo--col { flex-direction: column; align-items: stretch; gap: var(--s5); }
+
+  .plate-demo { padding: var(--s6); max-width: 30rem; }
+
+  /* Escala de instrumento: filete graduado + una marca de indice en lacre.
+     La barra mide; no es un control, asi que no se rellena de rojo.          */
+  .rulers { display: grid; gap: var(--s5); }
+  .ruler { display: grid; gap: var(--s2); }
+  .ruler__bar {
+    position: relative; height: 0.9rem;
+    border-bottom: var(--hair) solid var(--rule-lit);
+    background-image: repeating-linear-gradient(
+      to right, var(--rule-lit) 0 1px, transparent 1px 10%);
+    background-position: bottom; background-size: 100% 0.4rem;
+    background-repeat: no-repeat;
+  }
+  .ruler__idx {
+    position: absolute; bottom: 0; width: 2px; height: 0.9rem;
+    background: var(--lacre);
+  }
+
+  /* Diagrama del eje: dos campos medidos con filete, sin relleno.            */
+  .grid-proof {
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--s2);
+    height: 3rem; margin-top: var(--s5);
+  }
+  .grid-proof > i {
+    border-top: var(--hair) solid var(--rule-fn);
+    border-bottom: var(--hair) solid var(--rule-fn);
+  }
+  .grid-proof > i[data-eje] { border-left: 2px solid var(--lacre); }
+</style>
+</head>
+
+<body>
+<!--
+  DIRECCION · NIGREDO · surface: sistema de diseno
+
+  THESIS: Un estudio de tatuaje tratado como registro de obra: cada pieza es una
+  plancha numerada y citable. Rechaza la rejilla de tarjetas iguales con icono
+  arriba que usa por defecto todo negocio local.
+
+  OWN-WORLD: Tinta negra calida (#0B0907). Un unico papel hueso (#F4EFE6) que
+  aparece solo donde vive la obra o un dato. Un unico lacre (#C41E30) que solo
+  toca lo manipulable. Filetes de 1px, cero radio en toda la web, sombra
+  unicamente bajo el papel. Bodoni Moda con eje opsz real sobre Archivo variable.
+
+  STORY: El visitante ve criterio antes que precio, entiende que artista le
+  corresponde, y llega al formulario con la solicitud ya estructurada.
+
+  FIRST VIEWPORT: Eje vertical a 9.5rem del borde. Numero de plancha en el
+  margen izquierdo. Titular Bodoni a 6rem colgando del eje. Obra a sangre a la
+  derecha, sin marco.
+
+  FORM: Registro de especimenes grabado. Candidato 3 de la lista ordenada.
+
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the
+  finish review, the verdict, and DESIGN.md
+-->
+
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<div class="page">
+  <main id="main">
+
+    <!-- ================= CABECERA ================= -->
+    <header class="reg spec__head">
+      <div class="reg__margin">
+        <p class="plate-no">PLIEGO&nbsp;00</p>
+        <p class="marginalia only-desk" style="margin-top:var(--s3)">
+          Hoja de especimen. No se publica: existe para verificar el sistema
+          antes de construir sobre el.
+        </p>
+      </div>
+      <div class="reg__body">
+        <h1 class="d1">Sistema Registro</h1>
+        <p class="lead" style="margin-top:var(--s5)">
+          Tinta, papel y un solo rojo con oficio. Todo lo que hay debajo esta
+          medido, no estimado: los contrastes son reales y las curvas de
+          animacion estan elegidas una a una.
+        </p>
+      </div>
+    </header>
+
+    <!-- ================= 01 · EL EJE ================= -->
+    <section class="reg spec__sect">
+      <div class="reg__margin">
+        <p class="label">01 · Eje</p>
+      </div>
+      <div class="reg__body">
+        <h2 class="d3">Un filete recorre el documento entero</h2>
+        <p class="body fg-2" style="margin-top:var(--s4)">
+          Todo cuelga del mismo eje vertical. A la izquierda queda el margen de
+          ficha, donde viven el numero de plancha y las notas. A la derecha, la
+          obra. La asimetria sale de ahi y no de decidir a ojo donde poner cada
+          cosa: por eso aguanta cuando la pagina crece.
+        </p>
+        <p class="marginalia only-mobile" style="margin-top:var(--s4);max-width:none">
+          En movil el eje desaparece y el margen pasa a leerse encima del bloque.
+          No hay sitio para dos columnas por debajo de 960 px, y fingirlo es peor
+          que quitarlo.
+        </p>
+        <div class="grid-proof" aria-hidden="true">
+          <i style="grid-column: 1 / 4"></i>
+          <i data-eje style="grid-column: 4 / 13"></i>
+        </div>
+        <p class="xs fg-3" style="margin-top:var(--s2)">
+          Margen de ficha 9,5 rem · medida de lectura 66 caracteres · maximo 86 rem
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= 02 · TINTA Y PAPEL ================= -->
+    <section class="reg spec__sect">
+      <div class="reg__margin">
+        <p class="label">02 · Materia</p>
+      </div>
+      <div class="reg__body">
+        <h2 class="d3">Tinta, papel, lacre</h2>
+        <p class="body fg-2" style="margin-top:var(--s4)">
+          El negro es calido: hay mas rojo que azul en las sombras. No es el
+          gris azulado de plantilla. El papel aparece solo donde vive la obra o
+          un dato, y es lo unico que proyecta sombra, porque es lo unico que
+          esta fisicamente encima.
+        </p>
+
+        <div style="margin-top:var(--s6)">
+          <p class="label" style="margin-bottom:var(--s3)">Texto sobre tinta</p>
+          <div class="swatch">
+            <span class="swatch__chip" style="background:#EFE9DD"></span>
+            <span class="swatch__name">Principal<span class="swatch__hex">--fg · #EFE9DD</span></span>
+            <span class="swatch__ratio"><b>16,44:1</b>AAA</span>
+          </div>
+          <div class="swatch">
+            <span class="swatch__chip" style="background:#BEB4A4"></span>
+            <span class="swatch__name">Secundario<span class="swatch__hex">--fg-2 · #BEB4A4</span></span>
+            <span class="swatch__ratio"><b>9,71:1</b>AAA</span>
+          </div>
+          <div class="swatch">
+            <span class="swatch__chip" style="background:#948A7C"></span>
+            <span class="swatch__name">Metadato<span class="swatch__hex">--fg-3 · #948A7C</span></span>
+            <span class="swatch__ratio"><b>5,86:1</b>AA</span>
+          </div>
+          <div class="swatch">
+            <span class="swatch__chip" style="background:#8A8074"></span>
+            <span class="swatch__name">Etiqueta y filete funcional<span class="swatch__hex">--fg-mute · #8A8074</span></span>
+            <span class="swatch__ratio"><b>5,13:1</b>AA</span>
+          </div>
+        </div>
+
+        <div style="margin-top:var(--s6)">
+          <p class="label" style="margin-bottom:var(--s3)">Superficie</p>
+          <div class="swatch">
+            <span class="swatch__chip" style="background:#0B0907"></span>
+            <span class="swatch__name">Tinta, suelo de pagina<span class="swatch__hex">--ink · #0B0907</span></span>
+            <span class="swatch__ratio">calido</span>
+          </div>
+          <div class="swatch">
+            <span class="swatch__chip" style="background:#F4EFE6"></span>
+            <span class="swatch__name">Papel, la plancha<span class="swatch__hex">--paper · #F4EFE6</span></span>
+            <span class="swatch__ratio">17,36:1</span>
+          </div>
+          <div class="swatch">
+            <span class="swatch__chip" style="background:#C41E30"></span>
+            <span class="swatch__name">Lacre<span class="swatch__hex">--lacre · #C41E30</span></span>
+            <span class="swatch__ratio"><b>3,38:1</b>UI y titular</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 03 · LA REGLA DEL LACRE ================= -->
+    <section class="reg spec__sect">
+      <div class="reg__margin">
+        <p class="label">03 · Lacre</p>
+      </div>
+      <div class="reg__body">
+        <h2 class="d3">El rojo solo toca lo que responde</h2>
+        <p class="body fg-2" style="margin-top:var(--s4)">
+          El lacre da <span class="num">3,38:1</span> sobre tinta. Suficiente
+          para un componente de interfaz o un titular; insuficiente para texto
+          pequeno. En vez de aclararlo hasta volverlo rosa, cuando tiene que
+          llevar texto se vuelve bloque solido y el texto se cala en papel:
+          <span class="num">5,13:1</span>. La restriccion y la estetica coinciden,
+          porque un sello es exactamente eso.
+        </p>
+
+        <div class="demo" style="margin-top:var(--s6)">
+          <span class="stamp">Libre</span>
+          <span class="stamp">PL.&nbsp;014</span>
+          <span class="stamp">180&nbsp;&euro;</span>
+        </div>
+
+        <div class="cols cols--2" style="margin-top:var(--s6)">
+          <div>
+            <p class="label" style="margin-bottom:var(--s3)">Lleva lacre</p>
+            <ul class="stack--tight sm fg-2" role="list" style="display:grid">
+              <li>Boton y filtro activo</li>
+              <li>Tirador de arrastre</li>
+              <li>Zona seleccionada en la silueta</li>
+              <li>La cifra de precio mientras cambia</li>
+              <li>Anillo de foco y cursor de texto</li>
+              <li>Numero de plancha, porque es un enlace</li>
+            </ul>
+          </div>
+          <div>
+            <p class="label" style="margin-bottom:var(--s3)">No lleva lacre</p>
+            <ul class="stack--tight sm fg-3" role="list" style="display:grid">
+              <li>Titulares y cuerpo de texto</li>
+              <li>Filetes de separacion</li>
+              <li>Iconos decorativos</li>
+              <li>Fondos de seccion</li>
+              <li>Nada que el usuario no pueda tocar</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 04 · ESCALA ================= -->
+    <section class="reg spec__sect">
+      <div class="reg__margin">
+        <p class="label">04 · Escala</p>
+      </div>
+      <div class="reg__body">
+        <h2 class="d3">Tracking e interlineado por tamano</h2>
+        <p class="body fg-2" style="margin-top:var(--s4)">
+          Un solo <span class="num">letter-spacing</span> global siempre esta
+          mal en algun punto de la escala: lo grande se abre y lo pequeno se
+          cierra. Cada escalon lleva el suyo. Bodoni ademas trae eje optico, asi
+          que el trazo fino engorda solo al reducir el cuerpo.
+        </p>
+
+        <div style="margin-top:var(--s6)">
+          <div class="scale__row">
+            <p class="d1">Nada se forma</p>
+            <p class="scale__meta"><span>d1</span><span>44 → 96 px</span><span>tracking −0,035 em</span><span>leading 0,93</span></p>
+          </div>
+          <div class="scale__row">
+            <p class="d2">Cuatro manos, cuatro idiomas</p>
+            <p class="scale__meta"><span>d2</span><span>32 → 60 px</span><span>tracking −0,026 em</span><span>leading 1,0</span></p>
+          </div>
+          <div class="scale__row">
+            <p class="d3">Como se cura esto</p>
+            <p class="scale__meta"><span>d3</span><span>24 → 36 px</span><span>tracking −0,018 em</span><span>leading 1,12</span></p>
+          </div>
+          <div class="scale__row">
+            <p class="lead" style="max-width:none">Entradilla: dos lineas para situar al lector antes de que decida si sigue leyendo o se va a la galeria.</p>
+            <p class="scale__meta"><span>lead</span><span>17 → 20 px</span><span>tracking −0,006 em</span><span>leading 1,5</span></p>
+          </div>
+          <div class="scale__row">
+            <p class="body">Cuerpo. Trabaja con negro plano y geometria: ornamental, patron repetido, piezas que envuelven el miembro en vez de posarse encima. Dibuja sobre el cuerpo antes de tatuar, siempre.</p>
+            <p class="scale__meta"><span>body</span><span>16 px</span><span>tracking 0</span><span>leading 1,62</span><span>medida 66 car.</span></p>
+          </div>
+          <div class="scale__row">
+            <p class="label">Etiqueta de ficha · zona · artista</p>
+            <p class="scale__meta"><span>label</span><span>11 px</span><span>tracking +0,145 em</span><span>ancho 88 %</span></p>
+          </div>
+        </div>
+
+        <p class="label" style="margin-top:var(--s6);margin-bottom:var(--s3)">Cifras tabulares</p>
+        <div class="plate plate-demo on-paper">
+          <table class="num sm" style="width:100%;border-collapse:collapse">
+            <caption class="label" style="text-align:left;margin-bottom:var(--s3)">Horquilla estimada</caption>
+            <tbody>
+              <tr><td style="padding:.35rem 0">Antebrazo, 12 cm</td><td style="text-align:right">340 – 460 &euro;</td></tr>
+              <tr><td style="padding:.35rem 0">Costillas, 22 cm</td><td style="text-align:right">1.090 – 1.480 &euro;</td></tr>
+              <tr><td style="padding:.35rem 0">Gemelo, 9 cm</td><td style="text-align:right">210 – 290 &euro;</td></tr>
+            </tbody>
+          </table>
+          <p class="xs" style="margin-top:var(--s4);color:var(--plate-fg-3)">
+            Las cifras cuadran unas debajo de otras porque llevan tnum, no porque
+            haya una fuente monoespaciada haciendo de disfraz tecnico.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 05 · COMPONENTES ================= -->
+    <section class="reg spec__sect">
+      <div class="reg__margin">
+        <p class="label">05 · Controles</p>
+      </div>
+      <div class="reg__body">
+        <h2 class="d3">Respuesta al pulsar, no al soltar</h2>
+        <p class="body fg-2" style="margin-top:var(--s4)">
+          Todo lo pulsable baja a <span class="num">scale(0,97)</span> en
+          <span class="num">120 ms</span>. El hover va detras de
+          <span class="num">(hover: hover)</span> para que en movil un toque no
+          dispare un estado que no existe. Area tactil minima de
+          <span class="num">44 px</span> en todo.
+        </p>
+
+        <div class="demo" style="margin-top:var(--s6)">
+          <button class="btn btn--stamp" type="button">Pedir cita</button>
+          <button class="btn" type="button">Ver el registro</button>
+          <button class="btn btn--quiet" type="button">Descargar .ics</button>
+          <button class="btn" type="button" disabled>Reservado</button>
+        </div>
+
+        <p class="label" style="margin-top:var(--s6);margin-bottom:var(--s3)">Filtros combinables</p>
+        <div class="demo">
+          <button class="chip" type="button" aria-pressed="true">Vera Mota <span class="chip__count">4</span></button>
+          <button class="chip" type="button" aria-pressed="false">Realismo <span class="chip__count">3</span></button>
+          <button class="chip" type="button" aria-pressed="false">Costillas <span class="chip__count">1</span></button>
+        </div>
+
+        <p class="label" style="margin-top:var(--s6);margin-bottom:var(--s3)">Estado de un flash</p>
+        <div class="demo" style="gap:var(--s6)">
+          <span class="mark mark--libre">Libre</span>
+          <span class="mark mark--reservado">Reservado</span>
+          <span class="mark mark--tatuado">Tatuado</span>
+        </div>
+        <p class="xs fg-3" style="margin-top:var(--s3);max-width:48ch">
+          Cuadro lleno, banda de cinta, esquina troquelada. Se distinguen en
+          escala de grises, con daltonismo y en una captura impresa: el estado
+          nunca depende solo del color.
+        </p>
+
+        <div class="cols cols--2" style="margin-top:var(--s7)">
+          <div>
+            <p class="label" style="margin-bottom:var(--s3)">Campo correcto</p>
+            <div class="field">
+              <label class="field__label" for="d1">Zona del cuerpo</label>
+              <input class="input" id="d1" type="text" value="Antebrazo interno">
+              <p class="field__hint">Si dudas, elige la mas cercana y lo ajustamos en persona.</p>
+            </div>
+          </div>
+          <div>
+            <p class="label" style="margin-bottom:var(--s3)">Campo con error</p>
+            <div class="field" data-invalid>
+              <label class="field__label" for="d2">Presupuesto maximo</label>
+              <input class="input" id="d2" type="text" value="no se" aria-describedby="d2e" aria-invalid="true">
+              <p class="field__error" id="d2e">Necesitamos una cifra, aunque sea aproximada. Sin ella no podemos proponerte nada.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cols cols--2" style="margin-top:var(--s7)">
+          <div>
+            <p class="label" style="margin-bottom:var(--s3)">Vacio</p>
+            <div class="state">
+              <p class="state__title">Ninguna plancha con ese cruce</p>
+              <p class="state__text">La combinacion de filtros que has elegido no existe todavia en el registro. Prueba a quitar uno.</p>
+              <button class="btn" type="button">Quitar filtros</button>
+            </div>
+          </div>
+          <div>
+            <p class="label" style="margin-bottom:var(--s3)">Cargando</p>
+            <div class="skeleton" style="height:4rem"></div>
+            <div class="skeleton" style="height:4rem;margin-top:var(--s2)"></div>
+            <div class="skeleton" style="height:4rem;margin-top:var(--s2)"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 06 · MOTION ================= -->
+    <section class="reg spec__sect">
+      <div class="reg__margin">
+        <p class="label">06 · Motion</p>
+      </div>
+      <div class="reg__body">
+        <h2 class="d3">Curvas elegidas, no la de por defecto</h2>
+        <p class="body fg-2" style="margin-top:var(--s4)">
+          Las curvas integradas de CSS no tienen punch suficiente. Nada entra con
+          <span class="num">ease-in</span>: empieza lento justo en el momento en
+          que el usuario esta mirando. Nada de interfaz pasa de
+          <span class="num">300 ms</span>.
+        </p>
+
+        <div class="rulers" style="margin-top:var(--s6)">
+          <div class="ruler">
+            <p class="sm">Pulsar un boton <span class="fg-3 num">· 120 ms · ease-out</span></p>
+            <div class="ruler__bar"><i class="ruler__idx" style="left:12%"></i></div>
+          </div>
+          <div class="ruler">
+            <p class="sm">Hover y color <span class="fg-3 num">· 160 ms · ease</span></p>
+            <div class="ruler__bar"><i class="ruler__idx" style="left:16%"></i></div>
+          </div>
+          <div class="ruler">
+            <p class="sm">Filtro de galeria, FLIP <span class="fg-3 num">· 200 ms · ease-out</span></p>
+            <div class="ruler__bar"><i class="ruler__idx" style="left:20%"></i></div>
+          </div>
+          <div class="ruler">
+            <p class="sm">Panel y cajon <span class="fg-3 num">· 280 ms · curva de cajon</span></p>
+            <div class="ruler__bar"><i class="ruler__idx" style="left:28%"></i></div>
+          </div>
+          <div class="ruler">
+            <p class="sm">Revelado de imagen <span class="fg-3 num">· 520 ms · material, no interfaz</span></p>
+            <div class="ruler__bar"><i class="ruler__idx" style="left:52%"></i></div>
+          </div>
+        </div>
+
+        <p class="xs fg-3" style="margin-top:var(--s5);max-width:56ch">
+          Con movimiento reducido activado se cortan desplazamientos, revelados y
+          resortes, y se conservan opacidad y color, que si ayudan a entender lo
+          que acaba de pasar. Cada modulo de JavaScript consulta la misma media
+          query: no basta con desactivarlo en la hoja de estilos.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= 07 · PLANCHA ================= -->
+    <section class="reg spec__sect">
+      <div class="reg__margin">
+        <p class="label">07 · Plancha</p>
+      </div>
+      <div class="reg__body">
+        <h2 class="d3">Lo unico que proyecta sombra</h2>
+        <p class="body fg-2" style="margin-top:var(--s4)">
+          La sombra no es una decoracion que se reparte por igual: existe donde
+          algo esta fisicamente encima de otra cosa. En este sistema eso es la
+          plancha de papel y nada mas. Todo lo demas va a hueso y se separa con
+          un filete de un pixel.
+        </p>
+        <div class="demo demo--col" style="margin-top:var(--s6)">
+          <div class="plate plate-demo on-paper">
+            <p class="plate-no">PL.&nbsp;014</p>
+            <p class="d4" style="margin-top:var(--s2)">Banda ornamental cerrada</p>
+            <p class="sm" style="margin-top:var(--s3);color:var(--plate-fg-2)">
+              Vera Mota · Blackwork · Antebrazo · 2025
+            </p>
+          </div>
+          <div class="plate plate--punched plate-demo on-paper">
+            <p class="plate-no">F-05</p>
+            <p class="d4" style="margin-top:var(--s2)">Cerradura</p>
+            <p class="sm" style="margin-top:var(--s3);color:var(--plate-fg-2)">
+              Tatuado. La esquina troquelada lo dice sin necesidad de leer.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="reg spec__sect" style="padding-bottom:var(--s9)">
+      <div class="reg__margin"><p class="label">Fin</p></div>
+      <div class="reg__body">
+        <p class="statement">Fase 1 cerrada. El sistema aguanta.</p>
+        <p class="xs fg-3" style="margin-top:var(--s5);max-width:52ch">
+          Dos fuentes autoalojadas y subseteadas: 112 KB en total.
+          Cinco hojas de estilo, sin framework. Cero radio, un solo rojo,
+          una sola sombra.
+        </p>
+      </div>
+    </footer>
+
+  </main>
+</div>
+</body>
+</html>

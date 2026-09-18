@@ -1,0 +1,259 @@
+/* =============================================================================
+   NIGREDO · COMPONENTES
+   El lacre solo aparece en lo que se puede manipular: un boton, un filtro
+   activo, un tirador, una zona seleccionada, una cifra viva. Si no responde
+   al usuario, no lleva rojo.
+   ========================================================================== */
+
+/* --- BOTONES --------------------------------------------------------------- */
+
+.btn {
+  --btn-bg: transparent;
+  --btn-fg: var(--fg);
+  --btn-bd: var(--rule-fn);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  min-height: var(--touch);
+  padding: var(--s3) var(--s5);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: var(--hair) solid var(--btn-bd);
+  border-radius: var(--r);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  font-stretch: 88%;
+  line-height: 1;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  /* Propiedades nombradas una a una, nunca la palabra all. */
+  transition: transform var(--t-press) var(--ease-out),
+              background-color var(--t-fast) ease,
+              border-color var(--t-fast) ease,
+              color var(--t-fast) ease;
+}
+
+/* La respuesta va al pulsar, no al soltar: es donde el usuario esta mirando. */
+.btn:active { transform: scale(0.97); }
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { --btn-bd: var(--lacre); --btn-bg: var(--lacre-wash); }
+}
+
+/* Estampar: bloque de lacre con el texto calado en papel. Es el unico boton
+   con relleno de color en toda la web, y por eso se ve desde lejos.          */
+.btn--stamp {
+  --btn-bg: var(--lacre);
+  --btn-fg: var(--paper);
+  --btn-bd: var(--lacre);
+}
+.btn--stamp:focus-visible { outline-color: var(--paper); outline-offset: 2px; }
+.btn--stamp:active { --btn-bg: var(--lacre-deep); --btn-bd: var(--lacre-deep); }
+@media (hover: hover) and (pointer: fine) {
+  .btn--stamp:hover { --btn-bg: #D42234; --btn-bd: #D42234; }
+}
+
+.btn--quiet { --btn-bd: transparent; --btn-fg: var(--fg-2); padding-inline: var(--s3); }
+@media (hover: hover) and (pointer: fine) {
+  .btn--quiet:hover { --btn-fg: var(--fg); --btn-bg: var(--ink-field); --btn-bd: var(--rule-lit); }
+}
+
+.btn--wide { width: 100%; }
+
+.btn[disabled], .btn[aria-disabled="true"] {
+  --btn-fg: var(--fg-off);
+  --btn-bd: var(--rule-lit);
+  --btn-bg: transparent;
+  cursor: not-allowed;
+}
+.btn[disabled]:active, .btn[aria-disabled="true"]:active { transform: none; }
+
+/* --- CAMPOS ---------------------------------------------------------------- */
+
+.field { display: block; }
+.field + .field { margin-top: var(--s5); }
+
+.field__label {
+  display: block;
+  margin-bottom: var(--s2);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  font-stretch: 88%;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  color: var(--fg-mute);
+}
+
+.field__hint {
+  margin-top: var(--s2);
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+  color: var(--fg-3);
+  max-width: 52ch;
+}
+
+.input, .textarea, .select {
+  width: 100%;
+  min-height: var(--touch);
+  padding: var(--s3) var(--s4);
+  background: var(--ink-inset);
+  color: var(--fg);
+  /* Borde funcional a 5.13:1. Si el borde es lo unico que dice donde empieza
+     el campo, tiene que cumplir 1.4.11. Un filete decorativo no vale aqui.   */
+  border: var(--hair) solid var(--rule-fn);
+  border-radius: var(--r);
+  transition: border-color var(--t-fast) ease, background-color var(--t-fast) ease;
+}
+.textarea { min-height: 7.5rem; resize: vertical; line-height: 1.55; }
+
+.select {
+  appearance: none;
+  padding-right: var(--s7);
+  /* Punta dibujada con dos gradientes, no un glifo unicode haciendo de icono. */
+  background-image: linear-gradient(45deg, transparent 50%, var(--fg-mute) 50%),
+                    linear-gradient(135deg, var(--fg-mute) 50%, transparent 50%);
+  background-position: right 1.35rem center, right 1rem center;
+  background-size: 0.36rem 0.36rem, 0.36rem 0.36rem;
+  background-repeat: no-repeat;
+}
+
+.input:focus-visible, .textarea:focus-visible, .select:focus-visible {
+  border-color: var(--lacre);
+}
+
+/* Error: el lacre marca y bordea, pero el mensaje se lee en papel. Un texto
+   de error en rojo pequeno sobre tinta no llega a 4.5:1; este si llega.      */
+.field[data-invalid] .input,
+.field[data-invalid] .textarea,
+.field[data-invalid] .select { border-color: var(--lacre); background: var(--lacre-wash); }
+
+.field__error {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s2);
+  margin-top: var(--s2);
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+  color: var(--fg);
+}
+.field__error::before {
+  content: "";
+  flex: none;
+  width: 0.5rem; height: 0.5rem;
+  background: var(--lacre);
+  transform: translateY(-0.05em);
+}
+
+/* --- FILTROS --------------------------------------------------------------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: var(--touch);
+  padding: var(--s2) var(--s4);
+  background: transparent;
+  color: var(--fg-2);
+  border: var(--hair) solid var(--rule-lit);
+  border-radius: var(--r);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  font-stretch: 88%;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform var(--t-press) var(--ease-out),
+              color var(--t-fast) ease,
+              border-color var(--t-fast) ease,
+              background-color var(--t-fast) ease;
+}
+.chip:active { transform: scale(0.97); }
+@media (hover: hover) and (pointer: fine) {
+  .chip:hover { color: var(--fg); border-color: var(--fg-mute); }
+}
+/* Activo = manipulado por el usuario = lleva lacre. */
+.chip[aria-pressed="true"] {
+  color: var(--paper);
+  background: var(--lacre);
+  border-color: var(--lacre);
+}
+.chip[aria-pressed="true"]:focus-visible { outline-color: var(--paper); outline-offset: 2px; }
+
+.chip__count {
+  font-variant-numeric: tabular-nums lining-nums;
+  opacity: 0.62;
+}
+
+/* --- MARCAS DE ESTADO ------------------------------------------------------ */
+/* El estado de un flash no es un color: es una marca fisica. Asi se lee en
+   escala de grises, con daltonismo y en una captura impresa.                 */
+
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  font-stretch: 88%;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+}
+.mark::before {
+  content: "";
+  flex: none;
+  width: 0.7rem; height: 0.7rem;
+}
+
+/* Disponible: cuadro de lacre lleno. */
+.mark--libre { color: var(--fg); }
+.mark--libre::before { background: var(--lacre); }
+
+/* Reservado: banda de cinta. Trama diagonal, sin color propio. */
+.mark--reservado { color: var(--fg-3); }
+.mark--reservado::before {
+  background: repeating-linear-gradient(
+    -45deg, var(--fg-mute) 0 2px, transparent 2px 4px);
+}
+
+/* Tatuado: troquel. Cuadro vaciado con la esquina cortada. */
+.mark--tatuado { color: var(--fg-3); }
+.mark--tatuado::before {
+  border: 1px solid var(--fg-mute);
+  clip-path: polygon(0 0, 65% 0, 100% 35%, 100% 100%, 0 100%);
+}
+
+/* --- ESTADOS DE CARGA, VACIO Y ERROR --------------------------------------- */
+/* Disenados, no por defecto. Cada uno nombra el problema y la salida.        */
+
+.state {
+  display: grid;
+  gap: var(--s4);
+  justify-items: start;
+  padding: var(--s7) var(--s5);
+  border: var(--hair) dashed var(--rule-lit);
+}
+.state__title { font-family: var(--ff-display); font-size: var(--fs-d4); line-height: 1.2; }
+.state__text  { color: var(--fg-3); font-size: var(--fs-sm); max-width: 44ch; }
+
+/* Esqueleto de carga: un barrido de luz, no un bloque gris pulsando.         */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink-inset);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(239,233,221,.05) 45%, transparent);
+  transform: translateX(-100%);
+  animation: sweep 1.15s linear infinite;
+}
+@keyframes sweep { to { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after { animation: none; opacity: .5; transform: none; }
+}

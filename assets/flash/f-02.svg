@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 280" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Polilla menor">
+<title>Polilla menor</title>
+
+  <path d="M100 96v92"/>
+  <path d="M100 106c-16-26-44-42-62-34-16 7-14 34 2 52 15 17 40 22 60 10"/>
+  <path d="M100 106c16-26 44-42 62-34 16 7 14 34-2 52-15 17-40 22-60 10"/>
+  <path d="M100 152c-12 10-30 20-38 36-6 13 4 26 18 22 10-3 17-14 20-26"/>
+  <path d="M100 152c12 10 30 20 38 36 6 13-4 26-18 22-10-3-17-14-20-26"/>
+  <path d="M100 96c0-10-4-14-10-18M100 96c0-10 4-14 10-18"/>
+  <circle cx="66" cy="120" r="5"/><circle cx="134" cy="120" r="5"/>
+  <path d="M100 120v6M100 136v6"/>
+</svg>

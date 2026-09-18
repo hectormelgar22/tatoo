@@ -1,0 +1,163 @@
+/* =============================================================================
+   NIGREDO · RETICULA
+   Un eje. Un solo filete vertical recorre el documento entero y todo cuelga
+   de el: a la izquierda el margen de ficha (numero de plancha, etiqueta, nota
+   al margen), a la derecha la obra. La asimetria sale del eje, no de decidir
+   a ojo donde poner las cosas.
+   ========================================================================== */
+
+.page {
+  position: relative;
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* El eje: un filete continuo de arriba abajo del documento.                  */
+@media (min-width: 60rem) {
+  .page::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--gutter) + var(--spine));
+    top: 0;
+    bottom: 0;
+    width: var(--hair);
+    background: var(--rule);
+    pointer-events: none;
+  }
+}
+
+/* --- BLOQUE DE REGISTRO ---------------------------------------------------- */
+
+.reg {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s4);
+}
+
+.reg__margin { grid-column: 1; }
+.reg__body   { grid-column: 1; min-width: 0; }
+
+@media (min-width: 60rem) {
+  .reg {
+    grid-template-columns: var(--spine) minmax(0, 1fr);
+    column-gap: 0;
+    row-gap: var(--s5);
+  }
+  .reg__margin {
+    grid-column: 1;
+    padding-right: var(--s5);
+    text-align: right;          /* el margen se alinea contra el eje          */
+  }
+  .reg__body {
+    grid-column: 2;
+    padding-left: var(--s6);
+  }
+  /* Un bloque que ignora el margen pero sigue colgando del eje.              */
+  .reg__full { grid-column: 2; padding-left: var(--s6); min-width: 0; }
+  /* Un bloque que cruza el eje: se usa poco, y por eso funciona.             */
+  .reg__cross { grid-column: 1 / -1; min-width: 0; }
+}
+
+/* --- RITMO VERTICAL -------------------------------------------------------- */
+/* Un unico ritmo en toda la web, y siempre mas aire encima de un titular que
+   debajo: el espacio pertenece a la seccion que empieza.                     */
+
+.band { padding-block: var(--s8); }
+.band--tight { padding-block: var(--s7); }
+.band--wide  { padding-block: var(--s10); }
+.band + .band { padding-top: 0; }
+
+@media (min-width: 60rem) {
+  .band { padding-block: var(--s9); }
+  .band--tight { padding-block: var(--s8); }
+  .band--wide  { padding-block: var(--s11); }
+}
+
+.stack > * + * { margin-top: var(--s4); }
+.stack--tight > * + * { margin-top: var(--s2); }
+.stack--loose > * + * { margin-top: var(--s6); }
+
+/* --- SANGRE COMPLETA ------------------------------------------------------- */
+/* Para que una imagen llegue al borde del viewport dentro de .page.          */
+.bleed {
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+/* --- PLANCHA --------------------------------------------------------------- */
+/* La unica superficie de papel del sistema, y lo unico que proyecta sombra:
+   es lo unico que esta fisicamente encima. Todo lo demas va a hueso,
+   separado por filetes.                                                      */
+.plate {
+  position: relative;
+  background: var(--paper);
+  color: var(--plate-fg);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-plate);
+}
+
+/* Esquina troquelada: el estado "tatuado" es una marca fisica, no un color.  */
+.plate--punched {
+  clip-path: polygon(0 0, calc(100% - 1.15rem) 0, 100% 1.15rem, 100% 100%, 0 100%);
+}
+
+/* --- COLUMNAS ASIMETRICAS -------------------------------------------------- */
+
+.cols {
+  display: grid;
+  gap: var(--s6);
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 48rem) {
+  .cols--2  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Proporciones rotas a proposito: nada de tres columnas iguales.           */
+  .cols--73 { grid-template-columns: minmax(0, 7fr) minmax(0, 3fr); }
+  .cols--37 { grid-template-columns: minmax(0, 3fr) minmax(0, 7fr); }
+  .cols--58 { grid-template-columns: minmax(0, 5fr) minmax(0, 8fr); }
+}
+
+/* --- UTILIDADES MINIMAS ---------------------------------------------------- */
+
+.flow-end { margin-top: auto; }
+.measure  { max-width: var(--measure); }
+.measure-tight { max-width: var(--measure-tight); }
+.nowrap   { white-space: nowrap; }
+
+@media (min-width: 60rem) { .only-mobile { display: none !important; } }
+@media (max-width: 59.999rem) { .only-desk { display: none !important; } }
+
+/* --- RESERVA DE ALTURA ------------------------------------------------------ */
+/* El texto lo inyecta el script desde content.js, asi que el HTML llega con los
+   huecos vacios. Si no se reserva su altura, al rellenarse empujan hacia abajo
+   todo lo que tienen debajo: eso es un desplazamiento de maquetacion, y CLS es
+   una de las tres metricas con las que Google posiciona.
+
+   Las alturas no son numeros a ojo: salen de la propia escala tipografica
+   (tamano x interlineado x lineas), asi que si cambian los tokens la reserva
+   se ajusta sola. `min-height` y no `height`: si el texto crece, crece la caja.  */
+
+.rsv-d1   { min-height: calc(var(--fs-d1) * var(--lh-d1) * 2); }
+.rsv-d1-3 { min-height: calc(var(--fs-d1) * var(--lh-d1) * 3); }
+.rsv-d2   { min-height: calc(var(--fs-d2) * var(--lh-d2)); }
+.rsv-d3   { min-height: calc(var(--fs-d3) * var(--lh-d3)); }
+.rsv-lead-2 { min-height: calc(var(--fs-lead) * var(--lh-lead) * 2); }
+.rsv-lead-3 { min-height: calc(var(--fs-lead) * var(--lh-lead) * 3); }
+.rsv-body-3 { min-height: calc(var(--fs-body) * var(--lh-body) * 3); }
+
+@media (min-width: 60rem) {
+  /* En escritorio la medida es mas ancha, asi que el mismo texto ocupa menos
+     lineas y hay que reservar menos. */
+  .rsv-d1   { min-height: calc(var(--fs-d1) * var(--lh-d1) * 2); }
+  .rsv-d1-3 { min-height: calc(var(--fs-d1) * var(--lh-d1) * 2); }
+  .rsv-lead-3 { min-height: calc(var(--fs-lead) * var(--lh-lead) * 2); }
+}
+
+/* Dos reservas mas, tambien estructurales y no a ojo: la pista de fases es una
+   sola fila de botones de area tactil, y el bloque de filtros son tres grupos
+   de etiqueta mas una fila de chips.                                          */
+.rsv-pista   { min-height: calc(var(--touch) + var(--s4)); }
+.rsv-filtros { min-height: calc((var(--touch) + var(--s3) + 1.1rem) * 3 + var(--s5) * 2); }

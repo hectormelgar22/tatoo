@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="NIGREDO">
+  <rect width="32" height="32" fill="#0B0907"/>
+  <!-- La misma marca de troquel que usa el estado de una plancha. -->
+  <path d="M5 5h16l6 6v16H5z" fill="#C41E30"/>
+</svg>
