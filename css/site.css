@@ -377,6 +377,125 @@
   .firma:nth-child(even) .firma__retrato { order: 2; }
 }
 
+/* --- REDES SOCIALES --------------------------------------------------------- */
+/* Contact sheet, no viñetas de icono: filete recto entre celdas, como el
+   resto del registro. Cada foto abre el perfil real, no un post concreto —
+   por eso el aria-label describe la plancha en vez de fingir un permalink.   */
+
+.ig__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--hair);
+  background: var(--rule);
+  border: var(--hair) solid var(--rule);
+}
+@media (min-width: 60rem) {
+  .ig__grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+.ig__foto {
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--ink-inset);
+}
+.ig__foto img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform var(--t-panel) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .ig__foto:hover img { transform: scale(1.06); }
+}
+.ig__foto:focus-visible { outline: 2px solid var(--lacre); outline-offset: -3px; }
+
+/* TikTok no tiene fotos que mostrar de verdad — es vídeo — así que en vez de
+   fingir una miniatura, es una nota franca en su propia caja.               */
+.tiktok {
+  height: 100%;
+  padding: var(--s5);
+  border: var(--hair) solid var(--rule-lit);
+}
+@media (min-width: 60rem) {
+  .tiktok { display: grid; align-content: center; }
+}
+
+/* --- PREGUNTAS FRECUENTES ---------------------------------------------------- */
+/* <details>/<summary> nativo. La animacion es solo grid-template-rows, sin
+   JavaScript: los navegadores actuales tratan el contenido cerrado con
+   content-visibility, no con display:none, así que la transición corre en
+   los dos sentidos. Donde no corra, el acordeón sigue funcionando igual,
+   solo que sin barniz.                                                       */
+
+.faq { border-top: var(--hair) solid var(--rule); }
+.faq__item { border-bottom: var(--hair) solid var(--rule); }
+.faq__item summary { list-style: none; }
+.faq__item summary::-webkit-details-marker { display: none; }
+
+.faq__pregunta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+  min-height: var(--touch);
+  padding-block: var(--s4);
+  cursor: pointer;
+}
+.faq__pregunta span:first-child {
+  font-family: var(--ff-display);
+  font-optical-sizing: auto;
+  font-size: var(--fs-d4);
+  line-height: 1.3;
+  color: var(--fg-2);
+  transition: color var(--t-fast) ease;
+}
+.faq__item[open] .faq__pregunta span:first-child { color: var(--fg); }
+@media (hover: hover) and (pointer: fine) {
+  .faq__pregunta:hover span:first-child { color: var(--fg); }
+}
+.faq__pregunta:focus-visible { outline: 2px solid var(--lacre); outline-offset: -3px; }
+
+/* La marca: una cruz que se aplana a raya al abrir. Sin icono de libreria. */
+.faq__marca { position: relative; flex: none; width: 14px; height: 14px; }
+.faq__marca::before, .faq__marca::after {
+  content: "";
+  position: absolute; inset: 0; margin: auto;
+  background: var(--fg-mute);
+  transition: transform var(--t-ui) var(--ease-out), background-color var(--t-fast) ease;
+}
+.faq__marca::before { width: 100%; height: 1.5px; }
+.faq__marca::after { width: 1.5px; height: 100%; }
+.faq__item[open] .faq__marca::after { transform: scaleY(0); }
+@media (hover: hover) and (pointer: fine) {
+  .faq__item:hover .faq__marca::before,
+  .faq__item:hover .faq__marca::after { background: var(--fg); }
+}
+
+.faq__interior {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--t-ui) var(--ease-out);
+}
+.faq__item[open] .faq__interior { grid-template-rows: 1fr; }
+.faq__respuesta { overflow: hidden; min-height: 0; }
+.faq__respuesta p { max-width: 58ch; padding-bottom: var(--s5); }
+/* padding-block, no solo font-size: sin el, el enlace se queda en 23 px de
+   alto y no llega al minimo tactil de 24 px que pide WCAG 2.5.8.             */
+.faq__enlace {
+  display: inline-block;
+  padding-block: 3px;
+  margin: 0 0 calc(var(--s5) - 3px);
+  font-size: var(--fs-sm);
+  color: var(--fg-2);
+  text-underline-offset: 3px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .faq__enlace:hover { color: var(--fg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__interior, .faq__marca::before, .faq__marca::after { transition: none; }
+}
+
 /* --- HUECOS ---------------------------------------------------------------- */
 
 .hueco {

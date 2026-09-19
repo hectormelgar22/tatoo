@@ -63,6 +63,7 @@ window.STUDIO = {
     },
     email: "estudio@nigredo.example",      // ficticio
     instagram: "nigredo.tattoo",
+    tiktok: "nigredo.tattoo",         // ficticio: el @ sin la arroba
 
     horario: [
       { dias: "Martes a viernes", abre: "12:00", cierra: "20:30" },
@@ -174,6 +175,21 @@ window.STUDIO = {
         texto: "La agenda está cerrada estos días. Apúntate a la lista y te " +
                "avisamos en cuanto caiga una cancelación."
       }
+    },
+    redes: {
+      titular: "Lo que no cabe en una plancha",
+      entradilla: "El registro enseña la pieza terminada. En redes se ve el " +
+                  "proceso: la sesión entera, el trazo a medio hacer, cómo " +
+                  "queda la piel a los quince días.",
+      disclaimer: "Selección fija de la obra. Para ver lo último, entra en " +
+                  "el perfil.",
+      tiktokTexto: "Vídeos cortos del proceso: aguja, trazo, curado. Sin " +
+                   "editar de más."
+    },
+    faq: {
+      titular: "Antes de escribir",
+      entradilla: "Seis preguntas que nos hacen siempre. Si la tuya no está " +
+                  "aquí, el WhatsApp de la esquina te lleva directo."
     }
   },
 
@@ -622,7 +638,42 @@ window.STUDIO = {
   },
 
   /* ===========================================================================
-     10. PIE Y LEGAL
+     10. PREGUNTAS FRECUENTES
+         Van en portada, justo encima de la agenda. `enlace` es opcional: solo
+         las preguntas que de verdad llevan a otra parte de la web lo llevan.
+     ======================================================================== */
+  preguntas: [
+    { pregunta: "¿Hace falta cita, o puedo pasarme sin más?",
+      respuesta: "Cita, siempre. No atendemos sin reserva: si te presentas " +
+                 "sin haber escrito antes, te vamos a pedir que escribas " +
+                 "primero." },
+    { pregunta: "¿Puedo traer mi propio diseño?",
+      respuesta: "Sí, pero lo revisamos antes. Un diseño pensado para " +
+                 "pantalla no siempre funciona sobre piel, así que el " +
+                 "artista puede pedir cambios de tamaño o de trazo antes de " +
+                 "la cita." },
+    { pregunta: "¿Tatuáis encima de una cicatriz o de un tatuaje antiguo?",
+      respuesta: "Depende de qué haya debajo. Cuéntanoslo al pedir cita: " +
+                 "casi siempre hace falta rediseñar sobre lo que ya está, y " +
+                 "eso suele pedir una sesión más de lo normal." },
+    { pregunta: "¿Cómo se paga? ¿Hay que dejar señal?",
+      respuesta: "En el estudio, en efectivo o con tarjeta. Para piezas " +
+                 "grandes pedimos una señal al confirmar la cita, que se " +
+                 "descuenta del precio final." },
+    { pregunta: "¿Cuánto se tarda en conseguir cita?",
+      respuesta: "Entre cuatro y seis semanas, según artista y tamaño. Si " +
+                 "alguien cancela antes, aparece aquí abajo, en huecos por " +
+                 "cancelación.",
+      enlace: { texto: "Ver huecos por cancelación", href: "#t-huecos" } },
+    { pregunta: "Si el tatuaje pierde color o se difumina, ¿hacéis retoque?",
+      respuesta: "El primer retoque es gratis dentro de los tres meses " +
+                 "siguientes, si has seguido la guía de cuidados. Pasado ese " +
+                 "plazo, se cobra como una sesión corta.",
+      enlace: { texto: "Leer la guía de cuidados", href: "cuidados.html" } }
+  ],
+
+  /* ===========================================================================
+     11. PIE Y LEGAL
      ======================================================================== */
   pie: {
     creditos: "Estudio ficticio construido como demostración.",

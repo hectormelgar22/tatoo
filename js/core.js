@@ -210,7 +210,8 @@
             '<address class="pie__dir sm fg-2">' +
               esc(d.calle) + "<br>" + esc(d.cp) + " " + esc(d.ciudad) + " · " + esc(d.barrio) + "<br>" +
               '<a href="tel:+' + esc(S.studio.telefonoLimpio) + '" class="num">' + esc(S.studio.telefono) + "</a><br>" +
-              '<a href="https://instagram.com/' + esc(S.studio.instagram) + '" rel="noopener">@' + esc(S.studio.instagram) + "</a>" +
+              '<a href="https://instagram.com/' + esc(S.studio.instagram) + '" rel="noopener">Instagram @' + esc(S.studio.instagram) + "</a><br>" +
+              '<a href="https://www.tiktok.com/@' + esc(S.studio.tiktok) + '" rel="noopener">TikTok @' + esc(S.studio.tiktok) + "</a>" +
             "</address>" +
           "</div>" +
           '<div class="pie__bloque">' +
@@ -263,7 +264,10 @@
           dayOfWeek: h.dias, opens: h.abre, closes: h.cierra
         };
       }),
-      sameAs: ["https://instagram.com/" + S.studio.instagram],
+      sameAs: [
+        "https://instagram.com/" + S.studio.instagram,
+        "https://www.tiktok.com/@" + S.studio.tiktok
+      ],
       employee: S.artistas.map(function (a) {
         return { "@type": "Person", name: a.nombre, jobTitle: a.estilo };
       })

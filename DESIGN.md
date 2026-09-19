@@ -362,6 +362,21 @@ material, no interfaz, y por eso puede durar más.
 descubre de arriba abajo con `clip-path`, como una lámina que se posa. El
 contenido es visible por defecto: si el JavaScript falla, todo se ve igual.
 
+**Acordeón de preguntas** (`.faq`). `<details>`/`<summary>` nativo, no un
+widget de JavaScript: funciona sin script, el teclado y el lector de pantalla
+lo entienden solo, y `name="faq"` deja una sola pregunta abierta sin una
+línea de lógica propia. La animación es un `grid-template-rows` de 0fr a
+1fr — los navegadores actuales tratan el contenido cerrado de `<details>`
+con `content-visibility`, no con `display:none`, así que la transición corre
+en los dos sentidos sin trucos de JavaScript para medir altura.
+
+**Rejilla de redes** (`.ig__grid`). Contact sheet con filete recto entre
+celdas, no un embed de Instagram. Un widget de verdad es script de terceros
+con su propio permiso y su propio coste de CLS; esto es seis fotos reales
+del registro que enlazan al perfil. TikTok no lleva fotos: es vídeo, y una
+miniatura fingida habría sido mentir, así que es una nota franca en su
+propia caja.
+
 ## Do's and Don'ts
 
 **Hazlo así**
@@ -394,3 +409,6 @@ contenido es visible por defecto: si el JavaScript falla, todo se ve igual.
 - **Ni `ease-in` en nada que entre.** Empieza lento justo cuando el usuario mira.
 - **Nada de `columns` de CSS para mampostería.** Reordena visualmente sin
   reordenar el DOM: el tabulador salta en zigzag y el FLIP se vuelve imposible.
+- **Ni un embed de red social de verdad.** Es script de un tercero, con su
+  propio permiso y su propio coste de CLS. Si hay que enseñar redes, con
+  fotos propias y un enlace de salida basta.

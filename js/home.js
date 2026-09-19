@@ -175,6 +175,86 @@
     }).join("") +
     "</div>");
 
+  /* --- redes sociales --------------------------------------------------------- */
+  /* No hay embed de verdad: el widget de Instagram y el de TikTok son script
+     externo, piden su propio token y su propio permiso, y le clavan CLS y
+     peso a una pagina que ha costado sudor dejar en 0. En su lugar, un
+     adelanto honesto hecho con las mismas fotos del registro: si alguien
+     pincha, va al perfil real, no a una demo que finge estar en directo.     */
+
+  set("[data-redes-titular]", esc(S.textos.redes.titular));
+  set("[data-redes-entradilla]", esc(S.textos.redes.entradilla));
+
+  /* Ni la plancha de portada ni las cuatro de la tira: son planchas que no
+     se han enseñado todavia en esta pagina.                                  */
+  var paraRedes = S.planchas.filter(function (p) {
+    return p.n !== S.planchas[0].n && recientes.indexOf(p) === -1;
+  }).slice(0, 6);
+
+  var igEnlace = "https://instagram.com/" + S.studio.instagram;
+  var ttEnlace = "https://www.tiktok.com/@" + S.studio.tiktok;
+
+  set("[data-redes-cuerpo]",
+    '<div class="cols cols--73">' +
+      '<div>' +
+        '<p class="label">Instagram</p>' +
+        (paraRedes.length
+          ? '<ul class="ig__grid" role="list" style="margin-top:var(--s3)">' +
+            paraRedes.map(function (p) {
+              var a = N.artistaPor(p.artista);
+              return '<li>' +
+                '<a class="ig__foto" href="' + esc(igEnlace) + '" rel="noopener" ' +
+                  'aria-label="' + esc(p.titulo) + ", de " + esc(a.nombre) +
+                  '. Abre el perfil de Instagram.">' +
+                  N.imgHTML({
+                    base: p.img, tipo: "plancha", alt: "", ratio: p.ratio,
+                    sizes: "(min-width: 60rem) 11vw, 30vw"
+                  }) +
+                "</a></li>";
+            }).join("") +
+            "</ul>"
+          : "") +
+        '<a class="btn btn--stamp" style="margin-top:var(--s5)" href="' + esc(igEnlace) +
+          '" rel="noopener">Seguir en Instagram</a>' +
+        '<p class="xs fg-3" style="margin-top:var(--s3);max-width:40ch">' +
+          esc(S.textos.redes.disclaimer) + "</p>" +
+      "</div>" +
+      '<div class="tiktok">' +
+        '<p class="label">TikTok</p>' +
+        '<p class="body fg-2" style="margin-top:var(--s3)">' +
+          esc(S.textos.redes.tiktokTexto) + "</p>" +
+        '<a class="btn btn--stamp" style="margin-top:var(--s4)" href="' + esc(ttEnlace) +
+          '" rel="noopener">Seguir en TikTok</a>' +
+      "</div>" +
+    "</div>");
+
+  /* --- preguntas frecuentes ---------------------------------------------------- */
+  /* <details>/<summary> nativo: teclado, foco y el aria-expanded del boton de
+     resumen vienen gratis, y sigue funcionando entero sin JavaScript. El
+     desplegado unico (una pregunta abierta a la vez) lo da `name`, tambien
+     sin JavaScript.                                                          */
+
+  set("[data-faq-titular]", esc(S.textos.faq.titular));
+  set("[data-faq-entradilla]", esc(S.textos.faq.entradilla));
+
+  set("[data-faq-lista]",
+    '<div class="faq">' +
+    S.preguntas.map(function (q, i) {
+      return '<details class="faq__item" name="faq"' + (i === 0 ? " open" : "") + '>' +
+        '<summary class="faq__pregunta">' +
+          "<span>" + esc(q.pregunta) + "</span>" +
+          '<span class="faq__marca" aria-hidden="true"></span>' +
+        "</summary>" +
+        '<div class="faq__interior"><div class="faq__respuesta">' +
+          '<p class="body fg-2">' + esc(q.respuesta) + "</p>" +
+          (q.enlace
+            ? '<a class="faq__enlace" href="' + esc(q.enlace.href) + '">' + esc(q.enlace.texto) + "</a>"
+            : "") +
+        "</div></div>" +
+      "</details>";
+    }).join("") +
+    "</div>");
+
   /* --- huecos por cancelacion ------------------------------------------------ */
 
   set("[data-huecos-titular]", esc(S.textos.huecos.titular));

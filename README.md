@@ -55,6 +55,7 @@ numeradas. Las más habituales:
 |---|---|
 | Nombre, dirección, teléfono, WhatsApp, horarios | `studio` |
 | El botón flotante de WhatsApp y su mensaje | `studio.botonWhatsapp` |
+| El @ de Instagram y de TikTok | `studio.instagram`, `studio.tiktok` |
 | Titulares y entradillas de cada página | `textos` |
 | Artistas: bio, tarifa por hora, mínimo, agenda | `artistas` |
 | Precios del estimador | `estimador` |
@@ -62,6 +63,7 @@ numeradas. Las más habituales:
 | Flash y su estado | `flash` |
 | La guía de cuidados y los avisos del .ics | `cuidados` |
 | Huecos por cancelación | `huecos` |
+| Las preguntas frecuentes de la portada | `preguntas` |
 
 Dos reglas al editar:
 
@@ -88,6 +90,36 @@ dígitos y con prefijo de país**, sin espacios ni `+`:
 ```js
 whatsapp: "34600000000",
 ```
+
+### Redes sociales, en la portada
+
+La sección «Redes» no es un widget embebido de Instagram o de TikTok. Esos
+widgets son script de terceros: piden su propio permiso, pesan y suelen
+costar puntos de CLS — justo lo que más ha costado dejar en 0 en esta web.
+En su lugar hay un adelanto honesto: seis fotos del propio registro (nunca
+la de portada ni las cuatro más recientes, para no repetir) que enlazan al
+perfil real. Se recalculan solas al añadir o quitar planchas; no hay nada
+que mantener a mano. El bloque de TikTok no lleva fotos porque no hay
+vídeo que enseñar de verdad — fingir una miniatura habría sido mentir.
+
+Los usuarios van en `studio.instagram` y `studio.tiktok` (sin la arroba), y
+los textos en `textos.redes`.
+
+### Preguntas frecuentes
+
+Van en `preguntas`, justo encima de «Huecos por cancelación». Cada una es
+`{ pregunta, respuesta }`; el campo `enlace` es opcional y solo lo llevan
+las que de verdad mandan a otra parte de la web:
+
+```js
+{ pregunta: "¿Cuánto se tarda en conseguir cita?",
+  respuesta: "Entre cuatro y seis semanas...",
+  enlace: { texto: "Ver huecos por cancelación", href: "#t-huecos" } }
+```
+
+Se despliegan con `<details>`/`<summary>` nativo: funcionan sin JavaScript,
+el teclado y el lector de pantalla los entienden solos, y solo una pregunta
+queda abierta a la vez sin una sola línea de script para conseguirlo.
 
 ### Los estados del flash
 
