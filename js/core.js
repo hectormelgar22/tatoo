@@ -210,8 +210,16 @@
             '<address class="pie__dir sm fg-2">' +
               esc(d.calle) + "<br>" + esc(d.cp) + " " + esc(d.ciudad) + " · " + esc(d.barrio) + "<br>" +
               '<a href="tel:+' + esc(S.studio.telefonoLimpio) + '" class="num">' + esc(S.studio.telefono) + "</a><br>" +
-              '<a href="https://instagram.com/' + esc(S.studio.instagram) + '" rel="noopener">Instagram @' + esc(S.studio.instagram) + "</a><br>" +
-              '<a href="https://www.tiktok.com/@' + esc(S.studio.tiktok) + '" rel="noopener">TikTok @' + esc(S.studio.tiktok) + "</a>" +
+              /* Una cuenta vacia en content.js no deja un enlace roto: no deja
+                 enlace.                                                      */
+              (S.studio.instagram
+                ? '<a href="https://instagram.com/' + esc(S.studio.instagram) +
+                  '" rel="noopener">Instagram @' + esc(S.studio.instagram) + "</a><br>"
+                : "") +
+              (S.studio.tiktok
+                ? '<a href="https://www.tiktok.com/@' + esc(S.studio.tiktok) +
+                  '" rel="noopener">TikTok @' + esc(S.studio.tiktok) + "</a>"
+                : "") +
             "</address>" +
           "</div>" +
           '<div class="pie__bloque">' +
@@ -265,9 +273,9 @@
         };
       }),
       sameAs: [
-        "https://instagram.com/" + S.studio.instagram,
-        "https://www.tiktok.com/@" + S.studio.tiktok
-      ],
+        S.studio.instagram ? "https://instagram.com/" + S.studio.instagram : null,
+        S.studio.tiktok ? "https://www.tiktok.com/@" + S.studio.tiktok : null
+      ].filter(Boolean),
       employee: S.artistas.map(function (a) {
         return { "@type": "Person", name: a.nombre, jobTitle: a.estilo };
       })

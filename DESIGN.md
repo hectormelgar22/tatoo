@@ -362,20 +362,33 @@ material, no interfaz, y por eso puede durar más.
 descubre de arriba abajo con `clip-path`, como una lámina que se posa. El
 contenido es visible por defecto: si el JavaScript falla, todo se ve igual.
 
-**Acordeón de preguntas** (`.faq`). `<details>`/`<summary>` nativo, no un
-widget de JavaScript: funciona sin script, el teclado y el lector de pantalla
-lo entienden solo, y `name="faq"` deja una sola pregunta abierta sin una
-línea de lógica propia. La animación es un `grid-template-rows` de 0fr a
-1fr — los navegadores actuales tratan el contenido cerrado de `<details>`
-con `content-visibility`, no con `display:none`, así que la transición corre
-en los dos sentidos sin trucos de JavaScript para medir altura.
+**Índice de preguntas** (`.faq`). Cada pregunta va fichada con su número
+(`P. 01`) y, en escritorio, un filete de guía la une con la marca, como el
+índice de un libro impreso. La respuesta arranca alineada con la pregunta,
+no con el número. En estrecho el número se pone encima y la pregunta se
+queda con todo el ancho: una Bodoni a tres líneas en 250 px no se lee, se
+descifra.
 
-**Rejilla de redes** (`.ig__grid`). Contact sheet con filete recto entre
-celdas, no un embed de Instagram. Un widget de verdad es script de terceros
-con su propio permiso y su propio coste de CLS; esto es seis fotos reales
-del registro que enlazan al perfil. TikTok no lleva fotos: es vídeo, y una
-miniatura fingida habría sido mentir, así que es una nota franca en su
-propia caja.
+Por dentro es `<details>`/`<summary>` nativo, no un widget de JavaScript:
+funciona sin script, el teclado y el lector de pantalla lo entienden solos,
+y `name="faq"` deja una sola pregunta abierta sin una línea de lógica
+propia. La animación es un `grid-template-rows` de 0fr a 1fr — los
+navegadores actuales tratan el contenido cerrado de `<details>` con
+`content-visibility`, no con `display:none`, así que la transición corre en
+los dos sentidos sin trucos para medir altura.
+
+**Hoja de contactos** (`.hoja`). Las planchas en tira, a su proporción real,
+con el alto en común y el filete por hueco entre fotogramas. No es una
+rejilla de miniaturas cuadradas: eso es lo que separa «el proceso, sin
+filar» de la tira de obra filada de más arriba. Mide lo que miden sus
+fotogramas —estirarla hasta el borde de la columna deja cartulina vacía al
+final— y en estrecho se arrastra de lado, con el último fotograma cortado
+haciendo de pista.
+
+**Filas de cuenta** (`.cuenta`). Quién, dónde y qué hay dentro que no esté
+en la web. Sin bloque de lacre: el rojo con relleno de la portada es para
+pedir cita, y dos botones rojos gritando a la vez le quitan sitio. El lacre
+aparece solo al pasar por encima, en la punta.
 
 ## Do's and Don'ts
 

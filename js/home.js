@@ -178,9 +178,10 @@
   /* --- redes sociales --------------------------------------------------------- */
   /* No hay embed de verdad: el widget de Instagram y el de TikTok son script
      externo, piden su propio token y su propio permiso, y le clavan CLS y
-     peso a una pagina que ha costado sudor dejar en 0. En su lugar, un
-     adelanto honesto hecho con las mismas fotos del registro: si alguien
-     pincha, va al perfil real, no a una demo que finge estar en directo.     */
+     peso a una pagina que ha costado sudor dejar en 0.
+     Lo que hay en su lugar es una hoja de contactos: las planchas a su
+     proporcion real, en tira, con el filete entre fotogramas. No una rejilla
+     de miniaturas cuadradas, que es justo lo que este sitio no hace.         */
 
   set("[data-redes-titular]", esc(S.textos.redes.titular));
   set("[data-redes-entradilla]", esc(S.textos.redes.entradilla));
@@ -191,48 +192,70 @@
     return p.n !== S.planchas[0].n && recientes.indexOf(p) === -1;
   }).slice(0, 6);
 
-  var igEnlace = "https://instagram.com/" + S.studio.instagram;
-  var ttEnlace = "https://www.tiktok.com/@" + S.studio.tiktok;
+  /* Si el estudio no tiene una cuenta, no hay fila. Si no tiene ninguna, no
+     hay seccion: mas vale que falte a que quede un hueco con un titular.     */
+  var CUENTAS = [
+    { nombre: "Instagram", usuario: S.studio.instagram,
+      url: "https://instagram.com/" + S.studio.instagram,
+      que: S.textos.redes.instagramTexto },
+    { nombre: "TikTok", usuario: S.studio.tiktok,
+      url: "https://www.tiktok.com/@" + S.studio.tiktok,
+      que: S.textos.redes.tiktokTexto }
+  ].filter(function (c) { return c.usuario; });
 
-  set("[data-redes-cuerpo]",
-    '<div class="cols cols--73">' +
-      '<div>' +
-        '<p class="label">Instagram</p>' +
-        (paraRedes.length
-          ? '<ul class="ig__grid" role="list" style="margin-top:var(--s3)">' +
+  var seccionRedes = $("[data-redes-seccion]");
+  if (!CUENTAS.length) {
+    if (seccionRedes) seccionRedes.hidden = true;
+  } else {
+    if (seccionRedes) seccionRedes.hidden = false;
+
+    var primera = CUENTAS[0];
+
+    set("[data-redes-cuerpo]",
+      /* La hoja: alto fijo, ancho segun proporcion. En pantalla estrecha se
+         arrastra de lado, como se arrastra una hoja de contactos de verdad. */
+      (paraRedes.length
+        ? '<div class="hoja">' +
+            '<ul class="hoja__tira" role="list">' +
             paraRedes.map(function (p) {
               var a = N.artistaPor(p.artista);
-              return '<li>' +
-                '<a class="ig__foto" href="' + esc(igEnlace) + '" rel="noopener" ' +
+              return '<li class="hoja__hueco" style="aspect-ratio:' + p.ratio + '">' +
+                '<a class="hoja__frame" href="' + esc(primera.url) + '" rel="noopener" ' +
                   'aria-label="' + esc(p.titulo) + ", de " + esc(a.nombre) +
-                  '. Abre el perfil de Instagram.">' +
+                  ". Abre " + esc(primera.nombre) + '.">' +
                   N.imgHTML({
                     base: p.img, tipo: "plancha", alt: "", ratio: p.ratio,
-                    sizes: "(min-width: 60rem) 11vw, 30vw"
+                    sizes: "240px"
                   }) +
                 "</a></li>";
             }).join("") +
-            "</ul>"
-          : "") +
-        '<a class="btn btn--stamp" style="margin-top:var(--s5)" href="' + esc(igEnlace) +
-          '" rel="noopener">Seguir en Instagram</a>' +
-        '<p class="xs fg-3" style="margin-top:var(--s3);max-width:40ch">' +
-          esc(S.textos.redes.disclaimer) + "</p>" +
-      "</div>" +
-      '<div class="tiktok">' +
-        '<p class="label">TikTok</p>' +
-        '<p class="body fg-2" style="margin-top:var(--s3)">' +
-          esc(S.textos.redes.tiktokTexto) + "</p>" +
-        '<a class="btn btn--stamp" style="margin-top:var(--s4)" href="' + esc(ttEnlace) +
-          '" rel="noopener">Seguir en TikTok</a>' +
-      "</div>" +
-    "</div>");
+            "</ul>" +
+          "</div>" +
+          '<p class="xs fg-3 hoja__nota">' + esc(S.textos.redes.disclaimer) + "</p>"
+        : "") +
+
+      /* Las cuentas, como filas de un libro de registro: quien, donde y que
+         hay dentro. Sin dos bloques de lacre gritando a la vez: el rojo de
+         esta pagina es para pedir cita.                                      */
+      '<ul class="cuentas" role="list">' +
+      CUENTAS.map(function (c) {
+        return '<li><a class="cuenta" href="' + esc(c.url) + '" rel="noopener">' +
+          '<span class="label cuenta__red">' + esc(c.nombre) + "</span>" +
+          '<span class="cuenta__usuario">@' + esc(c.usuario) + "</span>" +
+          '<span class="cuenta__que">' + esc(c.que) + "</span>" +
+          '<span class="cuenta__ir">Abrir<i aria-hidden="true"></i></span>' +
+        "</a></li>";
+      }).join("") +
+      "</ul>");
+  }
 
   /* --- preguntas frecuentes ---------------------------------------------------- */
   /* <details>/<summary> nativo: teclado, foco y el aria-expanded del boton de
      resumen vienen gratis, y sigue funcionando entero sin JavaScript. El
      desplegado unico (una pregunta abierta a la vez) lo da `name`, tambien
-     sin JavaScript.                                                          */
+     sin JavaScript.
+     Cada pregunta va fichada con su numero, y la respuesta arranca alineada
+     con el texto de la pregunta, no con el numero: es un indice impreso.     */
 
   set("[data-faq-titular]", esc(S.textos.faq.titular));
   set("[data-faq-entradilla]", esc(S.textos.faq.entradilla));
@@ -242,14 +265,19 @@
     S.preguntas.map(function (q, i) {
       return '<details class="faq__item" name="faq"' + (i === 0 ? " open" : "") + '>' +
         '<summary class="faq__pregunta">' +
-          "<span>" + esc(q.pregunta) + "</span>" +
-          '<span class="faq__marca" aria-hidden="true"></span>' +
+          '<span class="plate-no faq__num">P. ' + String(i + 1).padStart(2, "0") + "</span>" +
+          '<span class="faq__texto">' + esc(q.pregunta) + "</span>" +
+          '<span class="faq__filete" aria-hidden="true"></span>' +
+          '<span class="faq__marca" aria-hidden="true"><i></i></span>' +
         "</summary>" +
         '<div class="faq__interior"><div class="faq__respuesta">' +
-          '<p class="body fg-2">' + esc(q.respuesta) + "</p>" +
-          (q.enlace
-            ? '<a class="faq__enlace" href="' + esc(q.enlace.href) + '">' + esc(q.enlace.texto) + "</a>"
-            : "") +
+          '<div class="faq__cuerpo">' +
+            '<p class="body fg-2">' + esc(q.respuesta) + "</p>" +
+            (q.enlace
+              ? '<a class="faq__enlace" href="' + esc(q.enlace.href) + '">' +
+                esc(q.enlace.texto) + '<i aria-hidden="true"></i></a>'
+              : "") +
+          "</div>" +
         "</div></div>" +
       "</details>";
     }).join("") +

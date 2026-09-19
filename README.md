@@ -96,14 +96,16 @@ whatsapp: "34600000000",
 La sección «Redes» no es un widget embebido de Instagram o de TikTok. Esos
 widgets son script de terceros: piden su propio permiso, pesan y suelen
 costar puntos de CLS — justo lo que más ha costado dejar en 0 en esta web.
-En su lugar hay un adelanto honesto: seis fotos del propio registro (nunca
-la de portada ni las cuatro más recientes, para no repetir) que enlazan al
-perfil real. Se recalculan solas al añadir o quitar planchas; no hay nada
-que mantener a mano. El bloque de TikTok no lleva fotos porque no hay
-vídeo que enseñar de verdad — fingir una miniatura habría sido mentir.
+En su lugar hay una hoja de contactos: seis planchas del propio registro
+(nunca la de portada ni las cuatro más recientes, para no repetir), a su
+proporción real, que enlazan al perfil. Se recalculan solas al añadir o
+quitar planchas; no hay nada que mantener a mano. Debajo, una fila por
+cuenta con lo que se encuentra en cada una.
 
 Los usuarios van en `studio.instagram` y `studio.tiktok` (sin la arroba), y
-los textos en `textos.redes`.
+los textos en `textos.redes`. **Si vacías uno de los dos, esa fila
+desaparece; si vacías los dos, desaparece la sección entera** en vez de
+dejar un titular sobre un hueco.
 
 ### Preguntas frecuentes
 

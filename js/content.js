@@ -181,10 +181,11 @@ window.STUDIO = {
       entradilla: "El registro enseña la pieza terminada. En redes se ve el " +
                   "proceso: la sesión entera, el trazo a medio hacer, cómo " +
                   "queda la piel a los quince días.",
-      disclaimer: "Selección fija de la obra. Para ver lo último, entra en " +
-                  "el perfil.",
-      tiktokTexto: "Vídeos cortos del proceso: aguja, trazo, curado. Sin " +
-                   "editar de más."
+      disclaimer: "Seis planchas del registro, fijas. Lo de esta semana está " +
+                  "en el perfil.",
+      /* Una línea por cuenta: qué se encuentra ahí y no en la web. */
+      instagramTexto: "Obra terminada y el trabajo del día, casi a diario.",
+      tiktokTexto: "Vídeos cortos: aguja, trazo, curado. Sin editar de más."
     },
     faq: {
       titular: "Antes de escribir",
